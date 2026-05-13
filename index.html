@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medicare Preventive Services Reference | Primary Care Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#ffffff;--bg2:#f8f7f4;--bg3:#f1efe8;
+--text:#1a1a1a;--text2:#555550;--text3:#888780;
+--border:#e0ddd4;--border2:#c8c5bc;
+--info-bg:#e6f1fb;--info-text:#0c447c;--info-border:#b5d4f4;
+--success-bg:#e1f5ee;--success-text:#085041;--success-border:#9fe1cb;
+--warn-bg:#faeeda;--warn-text:#633806;--warn-border:#fac775;
+--purple-bg:#eeedfe;--purple-text:#3c3489;
+--red-bg:#fcebeb;--red-text:#791f1f;
+--teal-bg:#e1f5ee;--teal-text:#085041;
+--amber-bg:#faeeda;--amber-text:#633806;
+--radius:8px;--radius-lg:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#f4f2ec;color:var(--text);min-height:100vh}
+.page-wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.page-header{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1.5rem}
+.page-header-icon{width:52px;height:52px;background:var(--info-bg);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.page-header-icon i{font-size:26px;color:var(--info-text)}
+.page-header h1{font-size:22px;font-weight:600;color:var(--text);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--text2);line-height:1.6}
+.page-header .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.meta-chip{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--bg3);color:var(--text2);border:0.5px solid var(--border)}
+.controls{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.25rem}
+.search-wrap{position:relative;margin-bottom:1rem}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
+#searchInput{width:100%;padding:9px 12px 9px 36px;border:0.5px solid var(--border2);border-radius:var(--radius);font-size:14px;background:var(--bg2);color:var(--text);outline:none}
+#searchInput:focus{border-color:#185fa5;background:var(--bg)}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:12px;color:var(--text3);margin-right:2px}
+.filter-btn{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:inherit}
+.filter-btn:hover{background:var(--bg2)}
+.filter-btn.active{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border);font-weight:500}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.count-bar{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.count-label{font-size:12px;color:var(--text3)}
+.service-grid{display:flex;flex-direction:column;gap:10px}
+.service-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color 0.15s}
+.service-card:hover{border-color:var(--border2)}
+.card-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+.card-header:hover{background:var(--bg2)}
+.tier-badge{font-size:11px;padding:3px 9px;border-radius:12px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.tier-visit{background:var(--info-bg);color:var(--info-text);border:0.5px solid var(--info-border)}
+.tier-screening{background:var(--success-bg);color:var(--success-text);border:0.5px solid var(--success-border)}
+.tier-inoffice{background:var(--warn-bg);color:var(--warn-text);border:0.5px solid var(--warn-border)}
+.card-title{flex:1;font-size:14px;font-weight:500;color:var(--text)}
+.card-freq{font-size:12px;color:var(--text3);white-space:nowrap}
+.chevron{font-size:16px;color:var(--text3);transition:transform 0.2s;flex-shrink:0}
+.chevron.open{transform:rotate(180deg)}
+.card-body{border-top:0.5px solid var(--border);display:none}
+.card-body.open{display:block}
+.tabs{display:flex;background:var(--bg2);border-bottom:0.5px solid var(--border);overflow-x:auto}
+.tab{font-size:12px;padding:9px 16px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:color 0.15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--info-text);border-bottom-color:#185fa5;font-weight:500;background:var(--bg)}
+.tab-content{display:none;padding:18px 20px}
+.tab-content.active{display:block}
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);margin-bottom:8px;margin-top:16px}
+.section-label:first-child{margin-top:0}
+.codes-table{width:100%;border-collapse:collapse}
+.codes-table tr{border-bottom:0.5px solid var(--border)}
+.codes-table tr:last-child{border-bottom:none}
+.codes-table td{padding:7px 0;vertical-align:top}
+.code-tag{font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--bg3);padding:2px 8px;border-radius:5px;color:var(--text);white-space:nowrap;display:inline-block}
+.code-desc{font-size:13px;color:var(--text2);line-height:1.5;padding-left:10px}
+.provider-grid{display:flex;flex-wrap:wrap;gap:7px}
+.provider-chip{font-size:12px;padding:4px 11px;border-radius:12px;background:var(--bg3);border:0.5px solid var(--border);color:var(--text)}
+.complexity-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border)}
+.comp-chip{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:500}
+.comp-high{background:var(--red-bg);color:var(--red-text)}
+.comp-mod{background:var(--warn-bg);color:var(--warn-text)}
+.comp-note{background:var(--bg3);color:var(--text2)}
+.cascade-list{display:flex;flex-direction:column;gap:2px}
+.cascade-item{display:flex;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--border);align-items:flex-start}
+.cascade-item:last-child{border-bottom:none}
+.cascade-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ci-order{background:var(--info-bg)}
+.ci-order i{color:var(--info-text);font-size:14px}
+.ci-refer{background:var(--success-bg)}
+.ci-refer i{color:var(--success-text);font-size:14px}
+.ci-schedule{background:var(--warn-bg)}
+.ci-schedule i{color:var(--warn-text);font-size:14px}
+.ci-enroll{background:var(--purple-bg)}
+.ci-enroll i{color:var(--purple-text);font-size:14px}
+.cascade-content{flex:1}
+.cascade-text{font-size:13px;color:var(--text);line-height:1.5}
+.cascade-code{font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--info-text);background:var(--info-bg);padding:1px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
+.cascade-type{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px}
+.ct-order{color:var(--info-text)}
+.ct-refer{color:var(--success-text)}
+.ct-schedule{color:var(--warn-text)}
+.ct-enroll{color:var(--purple-text)}
+.note-block{margin-bottom:16px}
+.note-narrative{font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg2);padding:12px 14px;border-radius:var(--radius);font-style:italic;margin-bottom:10px;border-left:3px solid var(--border2)}
+.note-hpi{border-left-color:#185fa5}
+.note-ros{border-left-color:#1D9E75}
+.note-pe{border-left-color:#BA7517}
+.note-ap{border-left-color:#533AB7;white-space:pre-line;font-style:normal;font-size:13px}
+.hpi-fields{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.hpi-field{font-size:12px;padding:6px 9px;background:var(--bg3);border-radius:var(--radius);border:0.5px solid var(--border)}
+.hpi-field strong{color:var(--text);font-weight:500;display:block;margin-bottom:1px}
+.hpi-field span{color:var(--text2)}
+.tasks-list{display:flex;flex-direction:column;gap:0}
+.task-item{padding:10px 0;border-bottom:0.5px solid var(--border)}
+.task-item:last-child{border-bottom:none}
+.task-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.role-badge{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:500}
+.role-md{background:var(--info-bg);color:var(--info-text)}
+.role-np{background:#eaf3de;color:#3b6d11}
+.role-rn{background:#eaf3de;color:#27500a}
+.role-ma{background:var(--warn-bg);color:var(--warn-text)}
+.task-desc{font-size:13px;color:var(--text);line-height:1.5}
+.task-code{font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--text3);margin-top:3px}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.empty-state i{font-size:32px;display:block;margin-bottom:8px}
+.print-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;margin-left:auto}
+.print-btn:hover{background:var(--bg2)}
+@media print{
+  body{background:white}
+  .page-wrap{padding:0}
+  .controls{display:none}
+  .card-body{display:block!important}
+  .tab-content{display:block!important}
+  .chevron{display:none}
+  .card-header{cursor:default}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<div class="page-header">
+  <div class="page-header-icon"><i class="ti ti-shield-heart"></i></div>
+  <div style="flex:1">
+    <h1>Medicare preventive services — clinical reference</h1>
+    <p>Complete service catalog with billing codes, qualified providers, care cascade protocols, and documentation templates (HPI · ROS · PE · A&P) aligned to 1995/1997 E&M guidelines. Designed for proactive, plan-of-care-driven primary care delivery.</p>
+    <div class="meta">
+      <span class="meta-chip"><i class="ti ti-map-pin" style="font-size:11px;vertical-align:-1px"></i> Alabama Locality 01</span>
+      <span class="meta-chip">2026 Medicare Physician Fee Schedule</span>
+      <span class="meta-chip">1995 &amp; 1997 E/M Documentation Guidelines</span>
+      <span class="meta-chip">CMS Preventive Services Catalog</span>
+    </div>
+  </div>
+  <button class="print-btn" onclick="window.print()"><i class="ti ti-printer"></i> Print</button>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <i class="ti ti-search"></i>
+    <input id="searchInput" type="text" placeholder="Search by service name, CPT/HCPCS code, or keyword..." oninput="render()">
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All services</button>
+    <button class="filter-btn" onclick="setFilter('visit',this)"><i class="ti ti-stethoscope" style="font-size:12px;vertical-align:-1px"></i> Tier 1 — complete visits</button>
+    <button class="filter-btn" onclick="setFilter('screening',this)"><i class="ti ti-scan" style="font-size:12px;vertical-align:-1px"></i> Tier 2 — referred screenings</button>
+    <button class="filter-btn" onclick="setFilter('inoffice',this)"><i class="ti ti-building-hospital" style="font-size:12px;vertical-align:-1px"></i> Tier 3 — in-office assessments</button>
+  </div>
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#185fa5"></span>Order / lab</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Refer out</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Schedule follow-up</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#533AB7"></span>Enroll in program</span>
+  </div>
+</div>
+
+<div class="count-bar">
+  <span class="count-label" id="countLabel"></span>
+</div>
+
+<div class="service-grid" id="grid"></div>
+
+</div>
+<script>
+const S=[
+{id:'ippe',tier:'visit',name:'Welcome to Medicare (IPPE)',freq:'Once in lifetime — first 12 months of Part B',
+codes:[
+{c:'G0402',d:'Initial preventive physical exam — MD/DO, NP, PA, CNS'},
+{c:'G0404',d:'EKG with interpretation & report (included within IPPE)'},
+{c:'G0405',d:'EKG rhythm strip only (alternative to G0404)'},
+{c:'99497',d:'Advance care planning add-on — first 30 min, same visit'},
+{c:'99498',d:'ACP add-on — each additional 30 min'},
+{c:'G2211',d:'Visit complexity add-on — new patient, ongoing relationship'}
+],
+providers:['MD/DO','NP','PA','CNS'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order lipid panel, fasting glucose, HbA1c — cardiovascular and metabolic baseline',code:'80061/82947/83036'},
+{t:'order',icon:'ti-activity',text:'Perform 12-lead EKG in office if cardiac risk factors identified',code:'93000'},
+{t:'refer',icon:'ti-scan',text:'Refer for AAA ultrasound — male 65–75, smoking history >100 cigarettes',code:'G0389'},
+{t:'refer',icon:'ti-bone',text:'Refer for DXA bone density — post-menopausal female, steroid use, fracture history',code:'77080'},
+{t:'refer',icon:'ti-lungs',text:'Refer for lung cancer LDCT — age 50–77, ≥20 pack-year history, current/recent smoker',code:'G0297'},
+{t:'refer',icon:'ti-microscope',text:'Refer for colorectal cancer screening appropriate to risk level',code:'G0121/G0464'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up E&M in 2–3 weeks to review all lab and imaging results',code:'99214–99215'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in CCM if 2+ chronic conditions identified',code:'99490/99491'},
+{t:'enroll',icon:'ti-calendar-repeat',text:'Establish AWV annually going forward',code:'G0438/G0439'}
+],
+hpi_narrative:'Patient presents for Welcome to Medicare initial preventive physical exam. She reports no acute complaints today. She has longstanding hypertension managed with lisinopril and notes she has not had a comprehensive health review since enrolling in Medicare. She reports occasional fatigue, no chest pain or dyspnea. Family history is significant for maternal coronary artery disease at age 67 and paternal type 2 diabetes. She is a former smoker with a 25 pack-year history, quit 8 years ago. She denies current tobacco, alcohol excess, or illicit substance use. Social history: lives alone, supportive family nearby, retired, functionally independent with all ADLs.',
+hpi_fields:[
+{l:'Chief complaint',v:'New Medicare patient — IPPE'},
+{l:'Quality',v:'Fatigue (mild, non-specific)'},
+{l:'Severity',v:'No acute complaints'},
+{l:'Context',v:'Family hx CAD (mother), T2DM (father)'},
+{l:'Duration',v:'Hypertension x several years on lisinopril'},
+{l:'Modifying factors',v:'Former smoker — quit 8 years ago, 25 pk-yr'},
+{l:'Associated Sx',v:'Denies CP, SOB, palpitations, syncope'},
+{l:'Social Hx',v:'Retired, lives alone, functionally independent'}
+],
+ros:'Constitutional (fatigue, unintentional weight change, fevers) · Cardiovascular (chest pain, palpitations, dyspnea on exertion, edema, claudication) · Respiratory (shortness of breath, cough, wheezing) · GI (bowel habit changes, rectal bleeding, abdominal pain) · GU (urinary frequency, dysuria, hematuria) · MSK (falls, fractures, joint pain, gait changes) · Neurological (cognition, memory, headache, weakness) · Psychiatric (depression PHQ-2, anxiety, mood, sleep) · Endocrine (polyuria, polydipsia, heat/cold intolerance) · Integumentary (skin lesions, wounds, bruising) · HEENT (vision changes, hearing loss) · Hematologic (easy bruising, bleeding) — minimum 10 systems; document positive and pertinent negatives individually.',
+pe:'Constitutional: Vital signs (BP sitting and standing, HR, RR, Temp, Ht, Wt, BMI — may be recorded by ancillary staff); general appearance, nutrition, development. Eyes: conjunctivae, lids, pupils, vision screening. ENT: external ears, hearing screen, oropharynx. Neck: thyroid palpation, lymphadenopathy, carotid auscultation. Cardiovascular: heart rate and rhythm, murmurs, gallops, rubs; carotid/abdominal/femoral bruits; peripheral pulses bilateral; lower extremity edema. Respiratory: respiratory effort, auscultation bilateral. Abdomen: inspection, palpation for masses/tenderness, liver and spleen, aortic palpation/bruits. MSK: gait assessment, fall risk screen, muscle tone. Neurological: orientation, Mini-Cog or cognitive screen, mood and affect. Integumentary: skin lesion inspection.',
+ap:`Assessment: Welcome to Medicare IPPE completed. New Medicare patient establishing care. Active problems: Hypertension (I10), former tobacco use (Z87.891). Cardiovascular risk elevated — family history CAD, former smoker 25 pack-years. Personalized prevention plan issued to patient.
+
+Plan: (1) Lipid panel, HbA1c, and fasting glucose ordered. (2) 12-lead EKG performed in office — interpreted and documented; baseline established. (3) Referral placed for AAA ultrasound (G0389) — clinical criteria documented (former smoker, appropriate age range). (4) PHQ-2 administered — score reviewed and documented (G0444 if standalone billing applicable). (5) BMI calculated — dietary counseling provided. (6) Immunization review completed — flu, pneumococcal, COVID-19 recommended; orders placed. (7) Advance care planning discussion initiated — patient preferences documented; directive discussed (99497 billed). (8) Written prevention checklist issued to patient. (9) Follow-up scheduled in 2–3 weeks to review all lab and imaging results and establish longitudinal care plan. (10) CCM enrollment discussed — patient interested, consent to be obtained at follow-up.`,
+complexity:'high',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Perform complete IPPE examination, interpret EKG, sign prevention plan, review all history, place orders and referrals',code:'G0402 · G0404 · 99497'},
+{role:'RN/MA',rc:'role-rn',desc:'Obtain vitals, BMI, vision screen, hearing screen, administer PHQ-2; collect detailed smoking and family history',code:'Included in G0402'},
+{role:'RN',rc:'role-rn',desc:'Administer ordered immunizations, document lot numbers and sites; provide written prevention checklist',code:'90471 + vaccine codes'},
+{role:'MA',rc:'role-ma',desc:'Coordinate referrals (AAA ultrasound, DXA, LDCT as applicable), schedule follow-up E&M in 2–3 weeks',code:'Admin'}
+]},
+
+{id:'awv',tier:'visit',name:'Annual Wellness Visit (AWV)',freq:'Annually — after first 12 months of Part B',
+codes:[
+{c:'G0438',d:'Initial AWV — first annual wellness visit providing personalized prevention plan'},
+{c:'G0439',d:'Subsequent AWV — every year after the initial AWV'},
+{c:'99497',d:'Advance care planning add-on — first 30 min, same visit'},
+{c:'99498',d:'ACP add-on — each additional 30 min'},
+{c:'G2211',d:'Visit complexity add-on — established longitudinal relationship'},
+{c:'G0444',d:'Annual depression screening — may bill same day as AWV'},
+{c:'G0442',d:'Alcohol misuse screening — may bill same day as AWV'},
+{c:'96160',d:'Health risk assessment — patient-administered instrument'}
+],
+providers:['MD/DO','NP','PA','CNS','RN (health risk assessment component only, under physician supervision)'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Update lab orders per personalized prevention plan — lipids, HbA1c, CBC, as scheduled',code:'Per schedule'},
+{t:'order',icon:'ti-brain',text:'Administer and score cognitive assessment — Mini-Cog or MMSE; document result',code:'Included/99483'},
+{t:'order',icon:'ti-mood-sad',text:'Administer PHQ-9 if PHQ-2 positive; document score and clinical response',code:'G0444/96127'},
+{t:'refer',icon:'ti-scan',text:'Refer for any overdue cancer screenings identified on prevention checklist',code:'Per service'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up E&M to address new problems or abnormal HRA findings',code:'99213–99215'},
+{t:'enroll',icon:'ti-heart-plus',text:'Renew/update CCM enrollment — confirm 2+ chronic conditions, update care plan',code:'99490/G0558'},
+{t:'enroll',icon:'ti-device-heart-monitor',text:'Discuss RPM enrollment for BP or glucose monitoring if indicated',code:'99453/99454'},
+{t:'enroll',icon:'ti-salad',text:'Refer to DPP if pre-diabetes identified and not yet enrolled',code:'G9873+'}
+],
+hpi_narrative:'Patient presents for subsequent annual wellness visit. No new acute complaints. She was last seen 3 months ago for hypertension management. She reports good medication compliance. Since last AWV she denies new falls, hospitalizations, or ER visits. She has noticed increasing forgetfulness over the past year — she and her family are concerned. Health Risk Assessment was completed via patient portal prior to this visit. Social history reviewed — continues to live independently, attends senior center twice weekly, supportive daughter nearby.',
+hpi_fields:[
+{l:'Chief complaint',v:'Annual wellness — subsequent AWV'},
+{l:'New concern',v:'Increasing forgetfulness x 1 year'},
+{l:'Context',v:'HRA completed pre-visit via patient portal'},
+{l:'Safety events',v:'No falls, hospitalizations, or ER visits since last AWV'},
+{l:'Medications',v:'Compliant with current regimen; no new OTC additions'},
+{l:'Social Hx',v:'Independent, socially active, supportive family'},
+{l:'Active conditions',v:'HTN, T2DM, knee OA — all under management'},
+{l:'Functional status',v:'Independent ADLs; ambulatory without assist device'}
+],
+ros:'Constitutional (weight changes, fatigue, appetite) · Cardiovascular (chest pain, palpitations, edema, exertional symptoms) · Respiratory (SOB, cough) · GI (bowel habits, reflux) · GU (urinary changes) · MSK (falls, joint pain, mobility changes) · Neurological (memory, cognition, balance, headache) · Psychiatric (depression PHQ-2, anxiety, mood, sleep quality, social isolation) · Endocrine (glucose control symptoms) · Integumentary (new lesions, wound healing) — minimum 10 systems reviewed; document positive and pertinent negatives.',
+pe:'Constitutional: VS updated (BP, HR, RR, Temp, Ht, Wt, BMI trend from prior visit). Cognitive: Mini-Cog administered — score documented (drawing and recall). Neurological: orientation, immediate and delayed recall, executive function. Psychiatric: mood (reported), affect (observed), PHQ-2 reviewed. Cardiovascular: rhythm and sounds, peripheral pulses, edema. MSK: gait and balance — Timed Up and Go if indicated. Vision and hearing screens updated per prevention plan schedule.',
+ap:`Assessment: Subsequent AWV completed. Prevention plan updated. Active problems reviewed: Hypertension (I10) — controlled; Type 2 Diabetes (E11.9) — A1c due; suspected mild cognitive impairment (R41.3) — new concern warranting formal evaluation.
+
+Plan: (1) Mini-Cog score 3/5 — cognitive impairment possible; formal cognitive assessment scheduled (99483) with care plan. (2) HbA1c ordered — last result 6 months ago. (3) PHQ-2 score 1 — negative; documented (G0444). (4) Alcohol misuse screen (G0442) administered — negative. (5) Prevention checklist updated: mammogram current, colorectal screening due, bone density pending — referrals initiated. (6) Fall risk: low per TUG — reassess next visit. (7) ACP: advance directive reviewed and updated in chart (99497). (8) CCM re-enrolled for upcoming year — care plan updated. (9) RPM discussed for BP monitoring — patient agreeable, order placed (99453/99454).`,
+complexity:'high',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Review HRA, complete examination, update prevention plan, address new cognitive concern, sign all orders',code:'G0439 · 99497'},
+{role:'RN/MA',rc:'role-rn',desc:'Administer PHQ-2, alcohol misuse screen, Mini-Cog, obtain vitals, BMI, TUG if indicated',code:'Included'},
+{role:'RN',rc:'role-rn',desc:'Update immunization record, provide written updated prevention checklist to patient',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Queue overdue referrals from prevention checklist, schedule cognitive evaluation and result follow-up',code:'Admin'}
+]},
+
+{id:'cvd_behav',tier:'visit',name:'Cardiovascular behavioral therapy',freq:'Once per year',
+codes:[
+{c:'G0446',d:'Annual intensive face-to-face cardiovascular behavioral counseling — 15 min'},
+{c:'G0537',d:'Cardiovascular risk assessment services'},
+{c:'G0538',d:'Cardiovascular risk management services — supplemental'},
+{c:'99213–99215',d:'E&M if additional problems addressed same day — modifier -25 required'},
+{c:'99406',d:'Tobacco cessation counseling 3–10 min — if current smoker at same visit'},
+{c:'99407',d:'Tobacco cessation counseling >10 min'}
+],
+providers:['MD/DO','NP','PA','CNS — primary care setting required for G0446'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order lipid panel if not done within 5 years',code:'80061'},
+{t:'order',icon:'ti-flask',text:'Order fasting glucose/HbA1c if metabolic risk factors present',code:'83036/82947'},
+{t:'refer',icon:'ti-salad',text:'Refer to dietitian/MNT if dietary counseling for CV disease indicated',code:'97802/97803'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up E&M if new CV risk factors require medication management',code:'99213–99214'},
+{t:'enroll',icon:'ti-smoking-no',text:'Enroll in tobacco cessation program if current smoker',code:'99406/99407'},
+{t:'enroll',icon:'ti-scale',text:'Enroll in obesity behavioral counseling if BMI ≥30',code:'G0447'}
+],
+hpi_narrative:'Patient presents for annual cardiovascular behavioral therapy session. He has known hypertension and hyperlipidemia. He reports poor diet over the past year — high processed food and red meat intake — and remains sedentary with no regular exercise. He continues to smoke approximately half a pack daily with a 30-year history. He denies chest pain, dyspnea, or palpitations at rest. BMI today 31.2. He expresses motivation to reduce cardiovascular risk and is agreeable to counseling today.',
+hpi_fields:[
+{l:'Chief complaint',v:'Annual CV behavioral counseling'},
+{l:'CV risk profile',v:'HTN, hyperlipidemia, BMI 31.2, smoker'},
+{l:'Diet',v:'High processed food, red meat; low vegetables'},
+{l:'Activity',v:'Sedentary — no regular exercise program'},
+{l:'Tobacco',v:'Current smoker 0.5 ppd x 30 years'},
+{l:'Associated Sx',v:'Denies CP, SOB at rest or exertion'},
+{l:'Medications',v:'Antihypertensive, statin — compliance reviewed'},
+{l:'Motivation',v:'Patient expresses readiness for change'}
+],
+ros:'Constitutional (weight, energy level) · Cardiovascular (CP, palpitations, exertional SOB, edema, claudication) · Respiratory (dyspnea, cough) · Endocrine (glucose symptoms, thyroid) · MSK (exercise tolerance, joint pain limiting activity) · Psychiatric (stress, depression contributing to barriers, motivation assessment).',
+pe:'Constitutional: VS including BMI documented; waist circumference if measured. Cardiovascular: rhythm and sounds, carotid bruits, peripheral pulses, lower extremity edema assessment. Respiratory: auscultation bilateral. Abdomen: liver size (alcohol/metabolic), general adiposity distribution.',
+ap:`Assessment: Cardiovascular behavioral therapy session completed. High CV risk profile: Hypertension (I10), Hyperlipidemia (E78.5), Active tobacco use disorder (F17.210), Obesity (E66.01), Sedentary lifestyle (Z72.3). Multiple modifiable risk factors addressed.
+
+Plan: (1) Dietary counseling provided — DASH diet principles reviewed, written materials provided. (2) Physical activity prescription given — 150 min/week moderate activity; starting with 20 min walks 5x/week. (3) Tobacco cessation: motivational counseling delivered >10 min (99407); cessation program referral placed; NRT discussed and prescription provided. (4) Lipid panel ordered — last result >2 years ago. (5) Obesity counseling appointment scheduled (G0447 series). (6) Statin compliance reviewed — dose adjustment to be considered pending lipid results. (7) Follow-up E&M in 3 months to assess progress and adjust medication plan.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Deliver 15-min structured behavioral counseling, document all risk factors, order labs, bill G0446',code:'G0446 · 99407'},
+{role:'RN',rc:'role-rn',desc:'Obtain BMI and BP, provide written dietary and physical activity materials, document tobacco history',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule tobacco cessation program, obesity counseling series, and follow-up E&M',code:'Admin'}
+]},
+
+{id:'aaa',tier:'screening',name:'Abdominal aortic aneurysm (AAA) screening',freq:'Once in lifetime — referral required',
+codes:[
+{c:'G0389',d:'Ultrasound screening for AAA — referred; radiology/vascular performs'},
+{c:'93000',d:'12-lead EKG with interpretation — in-office if cardiac risk warrants'},
+{c:'80061',d:'Lipid panel — ordered concurrent with cardiovascular workup'},
+{c:'99213–99215',d:'E&M to discuss referral indication, review results, establish care plan'}
+],
+providers:['MD/DO, NP, or PA — must write referral and document clinical indication; ultrasound performed by radiology or vascular surgery'],
+cascade:[
+{t:'order',icon:'ti-file-text',text:'Obtain and document detailed smoking history — calculate pack-years precisely',code:'Included in E&M'},
+{t:'order',icon:'ti-activity',text:'Order 12-lead EKG in-office if cardiac risk evaluation warranted',code:'93000'},
+{t:'order',icon:'ti-flask',text:'Order lipid panel and CBC if cardiovascular workup not recent',code:'80061/85025'},
+{t:'refer',icon:'ti-scan',text:'Place referral for one-time AAA ultrasound (G0389) — document indication in chart',code:'G0389'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M follow-up to review ultrasound result and establish vascular risk care plan',code:'99214'},
+{t:'enroll',icon:'ti-smoking-no',text:'Enroll in tobacco cessation if current smoker — document counseling',code:'99406/99407'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in CCM if additional chronic conditions identified at this encounter',code:'99490'}
+],
+hpi_narrative:'Patient presents for AAA screening referral. He is a 68-year-old male with a 35 pack-year smoking history, currently smoking 10 cigarettes per day. He reports no abdominal pain, pulsatile abdominal mass, or back pain. He notes his father died at age 72 from a "ruptured stomach blood vessel." He has a history of hypertension and peripheral vascular disease. He denies prior abdominal imaging. He is presenting to discuss cardiovascular preventive services after enrolling in Medicare.',
+hpi_fields:[
+{l:'Chief complaint',v:'AAA screening referral — preventive'},
+{l:'Location',v:'Abdomen — no current pain or mass'},
+{l:'Context',v:'Male 68, 35 pk-yr smoker, family hx AAA'},
+{l:'Family Hx',v:'Father — ruptured aortic aneurysm age 72'},
+{l:'Active conditions',v:'HTN (I10), PVD (I73.9) — elevated risk'},
+{l:'Imaging',v:'No prior abdominal imaging on record'},
+{l:'Associated Sx',v:'Denies back pain, leg ischemia, cold feet'},
+{l:'Tobacco',v:'Current smoker 10 cig/day; motivated for cessation'}
+],
+ros:'Constitutional (weight loss, fatigue) · Cardiovascular (CP, palpitations, claudication, exertional symptoms, edema) · Respiratory (SOB, cough) · GI (abdominal pain, early satiety, back pain) · MSK (leg cramps with exertion, back pain) · Vascular (cold extremities, non-healing wounds, color changes in legs) · Neurological (TIA symptoms — dizziness, visual changes).',
+pe:'Constitutional: VS, BMI. Cardiovascular: rhythm and sounds; carotid auscultation for bruits; abdominal auscultation for aortic bruits; aortic palpation assessing size and pulsatility; femoral pulse auscultation bilateral; femoral, popliteal, and pedal pulses bilateral; lower extremity edema and skin changes. Respiratory: lung auscultation. Abdomen: inspection, palpation — no palpable pulsatile mass, tenderness, hepatosplenomegaly.',
+ap:`Assessment: AAA screening indicated. Male 65–75 (age 68), smoking history >100 cigarettes lifetime (35 pack-years). First-degree family history of AAA (father). Comorbidities: Hypertension (I10), Peripheral vascular disease (I73.9), Tobacco use disorder (F17.210).
+
+Plan: (1) Referral placed for one-time AAA ultrasound screening (G0389) — indication fully documented. (2) 12-lead EKG performed in office today for cardiovascular baseline (93000) — results interpreted and documented. (3) Lipid panel and CBC ordered. (4) Tobacco cessation counseling provided >10 min (99407) — cessation program referral placed; NRT prescription provided. (5) Follow-up appointment scheduled in 2–3 weeks to review ultrasound and lab results and establish vascular risk care plan. (6) Patient educated on warning symptoms — sudden severe abdominal or back pain requires immediate ER evaluation; patient verbalized understanding.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Document clinical indication, write AAA referral, perform and interpret EKG, provide cessation counseling',code:'G0389 · 93000 · 99407'},
+{role:'RN',rc:'role-rn',desc:'Obtain and document detailed smoking history (pack-years), family history of AAA, peripheral pulse assessment',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule radiology AAA ultrasound, confirm prior auth if required, schedule 2–3 week follow-up E&M',code:'Admin'}
+]},
+
+{id:'bonemass',tier:'screening',name:'Bone mass measurement (DXA / osteoporosis)',freq:'Every 2 years (sooner if medically necessary)',
+codes:[
+{c:'77080',d:'DXA scan axial skeleton — hip and spine; referred or in-office if DXA equipped'},
+{c:'77081',d:'DXA appendicular skeleton — wrist/heel; if axial not available'},
+{c:'82306',d:'Vitamin D, 25-OH — ordered with bone workup'},
+{c:'82310',d:'Calcium, total — baseline bone metabolism'},
+{c:'83970',d:'Parathyroid hormone (PTH) — if metabolic bone disease suspected'},
+{c:'99214–99215',d:'E&M to review DXA results and establish treatment plan — separate visit'},
+{c:'96160',d:'Patient-administered FRAX risk assessment instrument'}
+],
+providers:['MD/DO, NP, or PA — orders and interprets; DXA performed by radiology tech or in-office if equipped'],
+cascade:[
+{t:'order',icon:'ti-calculator',text:'Calculate FRAX score — document 10-year major osteoporotic fracture risk at visit',code:'Included in E&M'},
+{t:'order',icon:'ti-flask',text:'Order calcium, vitamin D 25-OH, and PTH levels',code:'82310/82306/83970'},
+{t:'refer',icon:'ti-scan',text:'Place DXA referral (77080) — hip and lumbar spine; document clinical indication',code:'77080'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review DXA T-score, FRAX result, and establish treatment plan',code:'99214–99215'},
+{t:'enroll',icon:'ti-run',text:'Refer to PT for fall prevention if T-score ≤ -2.5 or fall history present',code:'PT referral'},
+{t:'enroll',icon:'ti-heart-plus',text:'Initiate CCM or PCM once osteoporosis becomes an actively managed chronic condition',code:'99490/99426'}
+],
+hpi_narrative:'Patient is a 66-year-old post-menopausal female presenting to establish a bone density baseline and assess fracture risk. She reports no prior DXA scan. She has been on oral prednisone 5 mg daily for 3 years for inflammatory arthritis. She denies prior fragility fractures but reports her mother sustained a hip fracture at age 71. She describes herself as sedentary and consumes minimal dairy. She was started on calcium carbonate and vitamin D by a prior provider but stopped 6 months ago due to GI upset. She denies current tobacco use and consumes alcohol occasionally.',
+hpi_fields:[
+{l:'Chief complaint',v:'Bone density baseline — fracture risk assessment'},
+{l:'Risk factors',v:'Post-menopausal, chronic steroid use x 3 yrs'},
+{l:'Family Hx',v:'Mother — hip fracture age 71'},
+{l:'Fracture history',v:'None — no prior fragility fractures'},
+{l:'Diet/activity',v:'Sedentary; low dairy; Ca+VitD discontinued'},
+{l:'Medications',v:'Prednisone 5mg daily (Z79.52); NSAIDs PRN'},
+{l:'Associated Sx',v:'Denies back pain, height loss, acute falls'},
+{l:'Duration',v:'Steroid use 3 years; no prior DXA on record'}
+],
+ros:'Constitutional (weight, height changes — document height loss) · MSK (back pain, joint pain, fractures, falls, gait changes, height loss) · Endocrine (thyroid symptoms, glucose, PTH-related symptoms) · GI (calcium supplement tolerance, bowel habits, reflux for bisphosphonate consideration) · Neurological (balance, dizziness, fall risk factors) · Cardiovascular (for pre-treatment workup if bisphosphonate initiated).',
+pe:'Constitutional: VS; height and weight (compare to prior visit if available — document any height loss ≥1.5 cm). MSK: spine palpation for tenderness, thoracic kyphosis assessment and documentation, gait and balance evaluation (Timed Up and Go), lower extremity muscle strength. Neurological: balance and proprioception screen. Integumentary: skin fragility, ecchymoses (steroid-related changes).',
+ap:`Assessment: Osteoporosis risk assessment indicated. Post-menopausal female (Z78.0), chronic corticosteroid use (Z79.52), maternal hip fracture history, low calcium intake, sedentary. FRAX 10-year major osteoporotic fracture risk calculated and documented.
+
+Plan: (1) DXA scan ordered (77080) — hip and lumbar spine; prior authorization initiated. (2) Vitamin D 25-OH, calcium, and PTH ordered. (3) Dietary counseling: calcium-rich foods reviewed; calcium citrate (better GI tolerance than carbonate) and vitamin D3 recommended with specific dosing. (4) Fall prevention strategies discussed — area rug removal, nightlights, grab bars. (5) Follow-up E&M scheduled in 3 weeks to review DXA result; if T-score ≤ -2.5, bisphosphonate therapy to be initiated. (6) PT referral to be placed if osteoporosis confirmed. (7) CCM enrollment discussed given multiple chronic conditions — consent to be obtained at follow-up.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Calculate FRAX score, order DXA and labs, provide calcium/VitD counseling, interpret DXA at follow-up',code:'77080 · 99214'},
+{role:'RN',rc:'role-rn',desc:'Document height and weight trend, fall risk screen, medication reconciliation for Ca+VitD compliance',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule DXA referral with prior auth, schedule follow-up E&M for result review in 3 weeks',code:'Admin'}
+]},
+
+{id:'lungcancer',tier:'screening',name:'Lung cancer screening (LDCT)',freq:'Annually — eligibility criteria required',
+codes:[
+{c:'G0297',d:'Low dose CT scan for lung cancer screening — referred to radiology; shared decision-making required first'},
+{c:'99213–99215',d:'E&M for shared decision-making counseling — required before ordering G0297'},
+{c:'94010',d:'Spirometry — order if COPD suspected concurrent with lung cancer screen'},
+{c:'99406',d:'Tobacco cessation counseling 3–10 min'},
+{c:'99407',d:'Tobacco cessation counseling >10 min — document if delivered at same visit'}
+],
+providers:['MD/DO, NP, or PA — must conduct and document shared decision-making counseling before ordering; CT performed by radiology'],
+cascade:[
+{t:'order',icon:'ti-file-description',text:'Document shared decision-making discussion — required before ordering LDCT; document risks, benefits, alternatives',code:'99213+'},
+{t:'order',icon:'ti-scan',text:'Order LDCT (G0297) — document: age 50–77, ≥20 pk-yr, current/quit within 15 yrs, asymptomatic',code:'G0297'},
+{t:'order',icon:'ti-wind',text:'Order spirometry if COPD suspected or exertional dyspnea present',code:'94010'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to pulmonology if prior lung pathology, COPD, or Lung-RADS ≥3 result',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review Lung-RADS score and spirometry result',code:'99214'},
+{t:'enroll',icon:'ti-smoking-no',text:'Enroll in tobacco cessation — document counseling delivered at this visit',code:'99406/99407'}
+],
+hpi_narrative:'Patient is a 61-year-old current smoker presenting for annual lung cancer screening shared decision-making counseling. He has a 28 pack-year history and currently smokes one pack per day. He quit for 2 years in his 40s but resumed. He denies hemoptysis, significant weight loss, or persistent cough. He reports mild exertional dyspnea on climbing stairs, attributed to deconditioning. No prior chest CT in the past 3 years. He expresses anxiety about the screening but agrees it is important.',
+hpi_fields:[
+{l:'Chief complaint',v:'Lung cancer screening SDM counseling'},
+{l:'Tobacco history',v:'28 pk-yr; current smoker 1 ppd; quit x2yr then relapsed'},
+{l:'Eligibility',v:'Age 50–77 ✓ · ≥20 pk-yr ✓ · Current smoker ✓'},
+{l:'Symptoms',v:'Mild exertional dyspnea on stairs — no hemoptysis'},
+{l:'Associated Sx',v:'Denies weight loss, persistent cough, fever'},
+{l:'Imaging',v:'No chest CT in past 3 years'},
+{l:'Context',v:'Motivated for cessation; anxious about screening'},
+{l:'Criteria',v:'All LDCT eligibility criteria met and documented'}
+],
+ros:'Constitutional (weight loss, night sweats, fevers — B-symptom screen) · Respiratory (cough character and duration, hemoptysis, wheezing, dyspnea on exertion, sputum production, pleuritic chest pain) · Cardiovascular (exertional CP, palpitations) · ENT (hoarseness, voice changes — recurrent laryngeal involvement screen) · Neurological (headache — brain metastasis screen) · MSK (bone pain, pathologic fracture risk) · Hematologic (easy bruising).',
+pe:'Constitutional: VS, weight, O2 saturation at rest. Respiratory: chest wall symmetry, accessory muscle use, percussion, auscultation bilateral lung fields (wheezing, diminished breath sounds, crackles, rhonchi). Cardiovascular: rhythm, sounds, JVD. ENT: voice quality, cervical and supraclavicular lymphadenopathy (critical for staging screen). Extremities: digital clubbing.',
+ap:`Assessment: Lung cancer screening indicated. Current smoker (F17.210), 28 pack-year history, age 61, asymptomatic for lung cancer — all LDCT criteria met. Mild exertional dyspnea (R06.09) — possible early COPD warranting spirometry.
+
+Plan: (1) Shared decision-making counseling completed and fully documented — risks, benefits, false positive rate, and follow-up implications discussed; patient verbalized understanding and provided consent. (2) LDCT order placed (G0297) — all eligibility criteria documented. (3) Spirometry ordered (94010) to evaluate for COPD. (4) Tobacco cessation counseling delivered >10 min (99407) — varenicline discussed, NRT prescription provided; cessation program referral placed. (5) Follow-up E&M scheduled to review Lung-RADS score and spirometry results. (6) Patient instructed: Lung-RADS 1–2 = annual rescreen; Lung-RADS 3–4 = expedited pulmonology follow-up — patient verbalized understanding of result categories.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Conduct and document shared decision-making, sign LDCT order with criteria documented, deliver cessation counseling',code:'G0297 · 99407'},
+{role:'RN',rc:'role-rn',desc:'Obtain O2 saturation, document detailed tobacco history (pack-year calculation), administer cessation readiness screen',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule LDCT at radiology, schedule spirometry, set results follow-up appointment',code:'Admin'}
+]},
+
+{id:'mammogram',tier:'screening',name:'Mammogram — breast cancer screening',freq:'Annually (women 40+)',
+codes:[
+{c:'77067',d:'Screening mammography bilateral — referred to radiology or breast imaging center'},
+{c:'G0101',d:'Cervical/vaginal cancer screening + clinical breast exam — may combine'},
+{c:'77046',d:'Breast MRI — if lifetime risk >20% or dense breast tissue (separate order)'},
+{c:'99213–99215',d:'E&M if additional problems addressed — modifier -25 required'}
+],
+providers:['MD/DO, NP, or PA — orders and signs; mammogram performed at radiology or dedicated breast imaging center'],
+cascade:[
+{t:'order',icon:'ti-report-medical',text:'Calculate lifetime breast cancer risk — Tyrer-Cuzick or equivalent model; document result',code:'Included in E&M'},
+{t:'order',icon:'ti-calendar-event',text:'Order annual bilateral screening mammogram (77067)',code:'77067'},
+{t:'refer',icon:'ti-dna',text:'Refer for genetic counseling if lifetime risk >20% or known BRCA mutation in family',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review mammogram result and BI-RADS category when available',code:'99213–99214'},
+{t:'enroll',icon:'ti-scan',text:'Discuss supplemental screening (MRI or ultrasound) if dense breast tissue reported on mammogram',code:'77046/76641'}
+],
+hpi_narrative:'Patient is a 58-year-old female presenting for her annual preventive visit. She is due for her screening mammogram — last mammogram 14 months ago, normal (BI-RADS 1). She reports no breast pain, nipple discharge, or self-detected lumps. Family history significant for maternal aunt with breast cancer at age 55. She underwent menopause at age 51 and is not on hormone replacement therapy. She performs monthly self-breast exam irregularly.',
+hpi_fields:[
+{l:'Chief complaint',v:'Annual screening mammogram — due'},
+{l:'Last mammogram',v:'14 months ago — BI-RADS 1 (normal)'},
+{l:'Symptoms',v:'No breast pain, discharge, or palpable mass'},
+{l:'Family Hx',v:'Maternal aunt — breast cancer age 55 (2nd degree)'},
+{l:'Hormonal',v:'Post-menopausal age 51; not on HRT'},
+{l:'Self-exam',v:'Irregular — counseled to perform monthly'},
+{l:'Risk assessment',v:'Lifetime risk calculation performed'},
+{l:'Eligibility',v:'Female ≥40 ✓ — annual screening covered'}
+],
+ros:'Constitutional (weight changes, fatigue, fevers) · Integumentary/Breast (pain, discharge, skin dimpling, nipple retraction, skin redness, self-detected masses) · Lymphatic (axillary swelling, lymph node enlargement) · Endocrine (menopausal symptoms, thyroid) · Psychiatric (anxiety related to family history — acknowledge and address).',
+pe:'Constitutional: VS, BMI. Integumentary: visual inspection of bilateral breasts — skin contour, dimpling or puckering, nipple inversion or retraction, erythema, peau d\'orange changes. Breast: palpation of bilateral breast tissue all quadrants and central; bilateral axillary lymph node palpation — document any masses, tenderness, or lymphadenopathy. (Document CBE components if billing G0101 simultaneously.)',
+ap:`Assessment: Breast cancer screening due. Post-menopausal female (Z78.0), family history of breast cancer (Z80.3). No clinical breast abnormality identified on today's examination.
+
+Plan: (1) Annual bilateral screening mammogram ordered (77067) — radiology referral placed. (2) Lifetime breast cancer risk calculated at 18% — below MRI supplemental screening threshold (>20%) but above average risk; shared decision-making documented. (3) Patient instructed to contact office immediately for any new lumps, skin changes, or nipple discharge before results return. (4) Results letter to be sent when available; any BI-RADS ≥3 result to be communicated by phone within 24 hours. (5) Colorectal screening reviewed on prevention checklist — due; referral discussed and patient agreeable. (6) Self-breast exam technique reviewed and reinforced.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Perform clinical breast exam, assess family history and lifetime risk, sign mammogram order, document SDM',code:'77067 · G0101'},
+{role:'RN',rc:'role-rn',desc:'Confirm last mammogram date, verify insurance authorization, provide patient education on process and results timeline',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule mammogram at contracted imaging center, set results follow-up reminder in scheduling system',code:'Admin'}
+]},
+
+{id:'colorectal',tier:'screening',name:'Colorectal cancer screening',freq:'Annual to every 10 years — varies by modality and risk',
+codes:[
+{c:'82270',d:'Fecal occult blood test gFOBT — annual; written referral required'},
+{c:'G0328',d:'Fecal immunochemical test (FIT) — annual; home kit'},
+{c:'G0464',d:'Multi-target stool DNA (Cologuard) — every 3 years; average risk ages 45–85'},
+{c:'G0121',d:'Colonoscopy — average risk; every 10 years (120 months)'},
+{c:'G0105',d:'Colonoscopy — high risk; every 2 years (24 months)'},
+{c:'G0120',d:'Screening flexible sigmoidoscopy — every 4 years (48 months)'},
+{c:'74263',d:'CT colonography (virtual colonoscopy) — every 5 years (60 months)'}
+],
+providers:['MD/DO, NP, or PA — orders and documents risk stratification; colonoscopy performed by gastroenterology; stool tests patient-collected or in-office'],
+cascade:[
+{t:'order',icon:'ti-clipboard-list',text:'Assess personal and family history of polyps, CRC, IBD — document risk level (average vs. high)',code:'Included in E&M'},
+{t:'order',icon:'ti-file-description',text:'Document shared decision-making — patient preference for modality; record in chart',code:'Included'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to GI for colonoscopy if patient preference or high risk (family history CRC)',code:'G0105/G0121'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review colonoscopy pathology results if polyps found and removed',code:'99213–99214'},
+{t:'enroll',icon:'ti-repeat',text:'If adenomatous polyps found — document surveillance schedule in care plan per GI recommendation',code:'Per GI'}
+],
+hpi_narrative:'Patient is a 62-year-old male presenting for colorectal cancer screening discussion. He has never had a colonoscopy. He reports no rectal bleeding, change in bowel habits, or unintentional weight loss. He has no personal history of polyps or IBD. His father was diagnosed with colon cancer at age 68. He is a current smoker with a high red meat diet. He is agreeable to colonoscopy but expresses concern about the prep. Shared decision-making discussion completed — patient agreed to colonoscopy given paternal history.',
+hpi_fields:[
+{l:'Chief complaint',v:'Colorectal cancer screening — never screened'},
+{l:'Symptoms',v:'No rectal bleeding, no bowel habit changes'},
+{l:'Personal history',v:'No polyps, no IBD, no prior CRC'},
+{l:'Family Hx',v:'Father — colon cancer age 68 (1st degree relative)'},
+{l:'Risk level',v:'High risk — first-degree relative with CRC <70'},
+{l:'Diet/tobacco',v:'High red meat diet; current smoker'},
+{l:'Patient preference',v:'Colonoscopy preferred after SDM discussion'},
+{l:'SDM',v:'Risks, benefits, alternatives discussed — documented'}
+],
+ros:'GI (bowel habits, rectal bleeding, hematochezia, melena, stool caliber changes, tenesmus, mucus, bloating, abdominal cramping, unintentional weight loss, nausea) · Constitutional (anorexia, fatigue, fevers — systemic symptom screen) · Hematologic (symptoms of iron deficiency anemia — pallor, fatigue, dyspnea).',
+pe:'Abdomen: inspection, auscultation (bowel sounds), palpation for masses, tenderness, hepatosplenomegaly; note any ascites. Rectal: digital rectal exam — sphincter tone, rectal masses, stool guaiac if clinically appropriate. Lymphatic: inguinal lymphadenopathy. Constitutional: weight documented, pallor and jaundice assessment.',
+ap:`Assessment: Colorectal cancer screening indicated and overdue. Age 62, never screened. Father with colon cancer at age 68 — first-degree relative, elevated risk classification (Z84.0). Current smoker; high red meat diet.
+
+Plan: (1) Shared decision-making completed and documented — patient selects colonoscopy given family history. (2) Colonoscopy referral placed to GI (G0105 — high risk, family history CRC) — prior authorization initiated. (3) Digital rectal exam performed in office today — no palpable rectal mass; guaiac negative. (4) Patient educated: first-degree relative with CRC means surveillance colonoscopy every 5 years rather than 10. (5) Colonoscopy prep instructions provided; patient verbalized understanding of process. (6) Follow-up E&M to be scheduled when pathology results available; surveillance plan to be established based on findings. (7) Tobacco cessation reinforced at this encounter.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Assess and document risk level, conduct SDM, select and order appropriate modality, perform DRE',code:'Per modality'},
+{role:'RN',rc:'role-rn',desc:'Document detailed family history, perform guaiac if ordered, provide colonoscopy prep education if applicable',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Place GI referral, obtain prior authorization, provide home stool test kit or schedule GI procedure',code:'Admin'}
+]},
+
+{id:'glaucoma',tier:'screening',name:'Glaucoma screening',freq:'Annually — high-risk patients only',
+codes:[
+{c:'92002',d:'Ophthalmological exam — new patient (performed by ophthalmologist)'},
+{c:'92012',d:'Ophthalmological exam — established patient (performed by ophthalmologist)'},
+{c:'99213–99215',d:'E&M to document risk factors, write referral, and review results — primary care'},
+{c:'G0402/G0439',d:'Glaucoma risk documentation embedded in IPPE or AWV as part of prevention plan'}
+],
+providers:['MD/DO, NP, or PA — documents risk and writes referral; ophthalmologist performs the actual glaucoma screen'],
+cascade:[
+{t:'order',icon:'ti-file-description',text:'Document glaucoma risk factors: DM, family history, race (African American ≥50, Hispanic ≥65)',code:'Included in E&M'},
+{t:'refer',icon:'ti-eye',text:'Refer to ophthalmology for annual glaucoma screening — patient cost: 20% after deductible',code:'92002/92012'},
+{t:'order',icon:'ti-flask',text:'Confirm diabetes control if DM is the qualifying risk factor — HbA1c current',code:'83036'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Confirm ophthalmology report received — close referral loop (MIPS Q374)',code:'99213'},
+{t:'enroll',icon:'ti-heart-plus',text:'Ensure DM management program active if diabetes is primary risk factor',code:'99490/G0108'}
+],
+hpi_narrative:'Patient is a 62-year-old African American male with type 2 diabetes presenting for annual preventive visit. He reports no eye pain, vision changes, or halos around lights. He has not seen an ophthalmologist in 2 years. He denies prior glaucoma diagnosis. His mother was diagnosed with glaucoma at age 68. He is at high risk: African American age ≥50 and family history of glaucoma — two qualifying risk factors.',
+hpi_fields:[
+{l:'Chief complaint',v:'Glaucoma screening — annual preventive'},
+{l:'Eye symptoms',v:'Denies eye pain, vision loss, halos, redness'},
+{l:'Risk factors',v:'African American ≥50 ✓ · Family hx glaucoma ✓'},
+{l:'Family Hx',v:'Mother — glaucoma diagnosed age 68'},
+{l:'Last eye exam',v:'2 years ago — no ophthalmology follow-up'},
+{l:'Active conditions',v:'Type 2 DM (E11.9) — additional risk factor'},
+{l:'Associated Sx',v:'Denies headaches, nausea with eye symptoms'},
+{l:'Medications',v:'Metformin, lisinopril — review for ocular SE'}
+],
+ros:'Eyes (visual acuity changes, peripheral vision loss, halos around lights, eye pain, redness, photophobia, floaters, diplopia) · Neurological (headache patterns) · Endocrine (diabetes control — contributes to ocular risk) · Cardiovascular (hypertension — additional glaucoma risk factor).',
+pe:'Eyes: inspection of conjunctivae and lids; pupil size, reactivity, and symmetry; gross visual acuity screen (Snellen chart); visual field confrontation test (peripheral vision screen). Constitutional: BP documented. Note: intraocular pressure measurement and optic disc assessment performed by ophthalmology — document referral and note that primary care exam is limited to gross visual screen and risk documentation.',
+ap:`Assessment: Glaucoma screening indicated annually. African American male age 62 (Z13.5), type 2 diabetes (E11.9), first-degree family history of glaucoma (Z83.511). Two qualifying risk factors present.
+
+Plan: (1) Referral placed to ophthalmology for annual glaucoma screen — patient cost: 20% coinsurance after Part B deductible applies (counsel patient). (2) Gross visual acuity checked in office today — 20/30 bilateral; referred for correction evaluation as well. (3) HbA1c reviewed — 7.2% at last draw 4 months ago; adequate control. (4) Patient educated on glaucoma symptoms requiring urgent ophthalmology evaluation (sudden eye pain, vision loss, halos). (5) Referral loop to be closed when ophthalmology report received — documented in chart per MIPS Q374.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Document qualifying risk factors, write ophthalmology referral, perform gross visual screen, counsel patient on cost share',code:'99213 + referral'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform Snellen visual acuity screen, document qualifying risk factors in chart',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule ophthalmology referral, set reminder to confirm report received and close referral loop',code:'Admin'}
+]},
+
+{id:'cvd_screen',tier:'inoffice',name:'Cardiovascular disease screening (lipid panel)',freq:'Once every 5 years',
+codes:[
+{c:'80061',d:'Lipid panel — cholesterol, HDL, LDL calculated, triglycerides; in-office lab draw'},
+{c:'82465',d:'Cholesterol total — if standalone'},
+{c:'83721',d:'LDL direct measurement — if calculated LDL unreliable (very high TG)'},
+{c:'36415',d:'Venipuncture — in-office lab draw for all lab orders at same visit'},
+{c:'G0537',d:'Cardiovascular risk assessment services'},
+{c:'99213–99215',d:'E&M to review lipid results and establish or adjust treatment plan'}
+],
+providers:['MD/DO, NP, or PA — orders and interprets; phlebotomist or MA performs draw; lab processes'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order fasting lipid panel (80061) — patient must fast 9–12 hours; document fasting status',code:'80061'},
+{t:'order',icon:'ti-calculator',text:'Calculate 10-year ASCVD risk score (ACC/AHA calculator) — document in A&P',code:'Included in E&M'},
+{t:'order',icon:'ti-flask',text:'Add fasting glucose and HbA1c to lab draw if metabolic risk present',code:'82947/83036'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review lipid results and calculate/update ASCVD risk score',code:'99213–99214'},
+{t:'enroll',icon:'ti-pill',text:'Initiate or adjust statin therapy at follow-up if ASCVD risk ≥7.5% and LDL elevated',code:'99214'},
+{t:'enroll',icon:'ti-salad',text:'Refer to cardiac rehabilitation or MNT if secondary prevention indicated',code:'97802/97803'}
+],
+hpi_narrative:'Patient is a 64-year-old male presenting for cardiovascular disease screening. His last lipid panel was 6 years ago and showed borderline high LDL of 138 mg/dL at that time — no statin was initiated. He has been trying to improve his diet and exercise over the past year. He has a family history of MI — his brother had a heart attack at age 58. He denies chest pain, exertional symptoms, or claudication. He has hypertension managed with amlodipine. He is a non-smoker.',
+hpi_fields:[
+{l:'Chief complaint',v:'Cardiovascular disease screening — lipid panel due'},
+{l:'Last lipid panel',v:'6 years ago — LDL 138, borderline; no statin started'},
+{l:'Family Hx',v:'Brother — MI at age 58 (1st degree relative)'},
+{l:'Symptoms',v:'Denies CP, exertional SOB, claudication'},
+{l:'Active conditions',v:'HTN on amlodipine — controlled'},
+{l:'Lifestyle',v:'Improved diet x 1 yr; walking 3x/week'},
+{l:'Tobacco/alcohol',v:'Non-smoker; social alcohol use'},
+{l:'ASCVD risk',v:'Calculation pending lab results'}
+],
+ros:'Cardiovascular (chest pain at rest or exertion, palpitations, dyspnea on exertion, lower extremity edema, claudication) · Constitutional (fatigue, weight changes) · Endocrine (thyroid symptoms — hypothyroidism can elevate LDL) · Neurological (TIA symptoms — headache, unilateral weakness, slurred speech) · MSK (exercise tolerance, muscle pain — statin myopathy screen if initiating therapy).',
+pe:'Constitutional: VS including BP (both arms if first assessment); BMI and waist circumference. Cardiovascular: heart rhythm and sounds, carotid auscultation for bruits, peripheral pulses bilateral, lower extremity edema. Integumentary: xanthomas (tendons, eyelids), xanthelasma (eyelid deposits — familial hyperlipidemia screen). Endocrine: thyroid palpation if hypothyroidism suspected.',
+ap:`Assessment: Cardiovascular disease screening — lipid panel due (last >5 years ago). Family history of premature CHD (brother MI age 58). Hypertension (I10), borderline hyperlipidemia at last screening (Z13.6). ASCVD 10-year risk calculation pending today's lab results.
+
+Plan: (1) Fasting lipid panel ordered (80061) — patient instructed to fast 9–12 hours prior to draw; fasting draw scheduled. (2) HbA1c and fasting glucose added to lab draw to complete metabolic cardiovascular risk profile. (3) TSH added — rule out hypothyroidism as secondary contributor to dyslipidemia. (4) ASCVD 10-year risk will be calculated at follow-up using today's results plus known risk factors. (5) If LDL ≥70 with ASCVD risk ≥7.5%, moderate-intensity statin initiation to be discussed at follow-up with shared decision-making. (6) Dietary and lifestyle reinforcement provided today — Mediterranean diet principles reviewed. (7) Follow-up E&M scheduled for result review and statin discussion.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Order lipid panel, calculate ASCVD risk at follow-up, initiate statin with SDM if indicated',code:'80061 · G0537'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform venipuncture for fasting labs, instruct patient on fasting requirements, obtain waist circumference',code:'36415'},
+{role:'MA',rc:'role-ma',desc:'Schedule fasting lab draw, schedule result review follow-up E&M',code:'Admin'}
+]},
+
+{id:'depression',tier:'inoffice',name:'Depression screening',freq:'Annually',
+codes:[
+{c:'G0444',d:'Annual depression screening — 15 min; may be standalone or included in AWV'},
+{c:'96127',d:'Brief emotional/behavioral assessment — scoring instrument (PHQ-9)'},
+{c:'99484',d:'General behavioral health integration — monthly monitoring if enrolled in BHI'},
+{c:'99492',d:'Collaborative care management — initial month (CoCM)'},
+{c:'99493',d:'CoCM — subsequent months'},
+{c:'99213–99215',d:'E&M to assess, initiate treatment, document complexity — depression is a chronic condition'}
+],
+providers:['MD/DO, NP, PA — screens and interprets; MA/RN may administer instrument under physician supervision; BHI/CoCM requires physician oversight'],
+cascade:[
+{t:'order',icon:'ti-clipboard-check',text:'Administer PHQ-2 — if score ≥3, administer full PHQ-9; document both scores in chart',code:'G0444/96127'},
+{t:'order',icon:'ti-flask',text:'Order TSH to rule out hypothyroidism as contributing factor; CBC if fatigue prominent',code:'84443/85025'},
+{t:'order',icon:'ti-pill',text:'Review all current medications for depression risk (beta-blockers, steroids, interferons)',code:'Included in E&M'},
+{t:'refer',icon:'ti-brain',text:'Refer to behavioral health or psychiatry if PHQ-9 ≥15 (severe), SI present, or treatment-resistant',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M follow-up in 2–4 weeks if initiating antidepressant to assess response',code:'99213–99214'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in BHI or CoCM for monthly monitoring if MDD confirmed and ongoing management needed',code:'99484/99492'}
+],
+hpi_narrative:'Patient presents for annual wellness visit. During health risk assessment she endorsed low mood and loss of interest in activities over the past 2 weeks. PHQ-2 score 4 (positive). PHQ-9 administered — score 11 (moderate depression). She reports decreased sleep, low energy, poor concentration, and feelings of worthlessness. She denies suicidal ideation, plan, or intent. She recently lost her spouse 4 months ago and reports increasing social isolation. She has no prior psychiatric history and is not on antidepressants.',
+hpi_fields:[
+{l:'Chief complaint',v:'Low mood, anhedonia — identified on HRA'},
+{l:'PHQ-2 score',v:'4 — positive (threshold ≥3)'},
+{l:'PHQ-9 score',v:'11 — moderate depression'},
+{l:'Duration',v:'Onset approximately 4 months (post-bereavement)'},
+{l:'Context',v:'Recent spousal loss; increasing social isolation'},
+{l:'Sleep/energy',v:'Insomnia, low energy, poor concentration'},
+{l:'Suicidality',v:'Denies SI, HI, plan, intent — documented'},
+{l:'Psychiatric Hx',v:'No prior psychiatric diagnosis; no current tx'}
+],
+ros:'Psychiatric (depressed mood, anhedonia, sleep disturbance, appetite changes, concentration, worthlessness, hopelessness, suicidal ideation — PHQ-9 items individually reviewed) · Constitutional (fatigue, weight changes, appetite) · Neurological (cognitive changes, memory — differentiate from pseudodementia) · Endocrine (thyroid — hypothyroidism contributor) · Cardiovascular (palpitations, panic symptoms).',
+pe:'Constitutional: VS, general appearance, grooming, psychomotor activity (retardation or agitation noted). Neurological: orientation to person, place, time, situation. Psychiatric: mood (patient-stated), affect (observed — flat, blunted, congruent or incongruent), thought process (linear vs. disorganized), thought content (no SI/HI expressed), judgment and insight (intact), cognitive screen (Mini-Cog if not performed at today\'s AWV).',
+ap:`Assessment: Major depressive disorder, single episode, moderate (F32.1). Bereavement (Z63.4). No suicidal ideation or plan. PHQ-9 score 11. No prior psychiatric history.
+
+Plan: (1) Depression screening documented (G0444); PHQ-9 score 11 — moderate. (2) TSH ordered to rule out hypothyroidism. (3) Treatment options discussed: SSRI, psychotherapy, or combination — patient agreeable to SSRI trial; sertraline 50 mg daily initiated. (4) Grief support resources provided — local bereavement group information given; community center programs listed. (5) Safety planning completed — patient verbalized she would contact family or call 988 if ideation developed. (6) BHI enrollment discussed — patient agrees to monthly monitoring (99484). (7) Follow-up scheduled in 3 weeks to assess SSRI tolerance and check PHQ-9 response. (8) If no meaningful improvement at 6 weeks, psychiatry referral to be placed. (9) Complexity documented: multiple active chronic conditions + new psychiatric diagnosis = high complexity MDM.`,
+complexity:'high',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Interpret PHQ-9, assess suicidality, initiate treatment plan, complete safety planning, document MDM complexity',code:'G0444 · 99214 · 99484'},
+{role:'RN/MA',rc:'role-rn',desc:'Administer PHQ-2 and PHQ-9, document scores, complete safety screen documentation',code:'96127'},
+{role:'RN',rc:'role-rn',desc:'Provide crisis resources (988 Suicide and Crisis Lifeline), community support information, coordinate BHI enrollment',code:'99484'}
+]},
+
+{id:'alcohol',tier:'inoffice',name:'Alcohol misuse screening & counseling',freq:'Screening annually · Counseling up to 4 sessions/year',
+codes:[
+{c:'G0442',d:'Annual alcohol misuse screening — 15 min (AUDIT-C or full AUDIT instrument)'},
+{c:'G0443',d:'Brief face-to-face alcohol misuse counseling — 15 min (up to 4x/year)'},
+{c:'99408',d:'Alcohol and/or substance abuse structured assessment 15–30 min'},
+{c:'99409',d:'Alcohol and/or substance abuse structured assessment >30 min'},
+{c:'99213–99215',d:'E&M to address alcohol-related medical complications — modifier -25 if same day as G0442'}
+],
+providers:['MD/DO, NP, PA — primary care setting required; AUDIT instrument may be administered by clinical staff under supervision'],
+cascade:[
+{t:'order',icon:'ti-clipboard-check',text:'Administer AUDIT-C — if score ≥3 (women) or ≥4 (men), administer full AUDIT',code:'G0442'},
+{t:'order',icon:'ti-flask',text:'Order LFTs (AST, ALT, GGT, bilirubin) if hazardous use confirmed or liver disease suspected',code:'80076'},
+{t:'order',icon:'ti-pill',text:'Review medications for dangerous alcohol interactions: warfarin, benzos, opioids, metformin',code:'Included in E&M'},
+{t:'refer',icon:'ti-brain',text:'Refer to addiction medicine or SUD treatment program if AUDIT score ≥16 (severe AUD)',code:'H0004/H2036'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule remaining counseling sessions — up to 4x/year (G0443) if hazardous use identified',code:'G0443 x4'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in SUD treatment program if alcohol use disorder criteria met (DSM-5)',code:'H0004/H2036'}
+],
+hpi_narrative:'Patient presents for annual wellness visit. AUDIT-C administered prior to encounter — score 5 (positive, exceeds male threshold of 4). Full AUDIT administered — score 12 (hazardous/harmful use). Patient reports 4–5 drinks on 3–4 nights per week, primarily wine and beer. He denies morning drinking, memory blackouts, or failed quit attempts. He reports increased alcohol use following job-related stress over the past year. He denies legal problems related to alcohol and does not feel he has a problem, but is agreeable to discussing it.',
+hpi_fields:[
+{l:'Chief complaint',v:'Alcohol misuse screen — positive on AUDIT'},
+{l:'AUDIT-C score',v:'5 — positive (male threshold ≥4)'},
+{l:'Full AUDIT score',v:'12 — hazardous/harmful use'},
+{l:'Pattern',v:'4–5 drinks, 3–4 nights/week; no binge episodes'},
+{l:'Context',v:'Escalation x 12 months — occupational stress trigger'},
+{l:'Dependence Sx',v:'Denies AM drinking, blackouts, failed quit attempts'},
+{l:'Safety',v:'No DUI, legal issues, or family violence'},
+{l:'Medications',v:'Metformin on file — review alcohol interaction'}
+],
+ros:'Psychiatric (mood, anxiety, sleep quality, stress, motivation, withdrawal symptoms — tremor, diaphoresis, seizure history) · GI (nausea, abdominal pain, GERD, hepatic symptoms, pancreatitis history) · Neurological (memory, coordination, peripheral neuropathy symptoms) · Cardiovascular (hypertension — alcohol contribution, palpitations, arrhythmia) · Constitutional (weight changes, fatigue).',
+pe:'Constitutional: VS, weight, BMI. Abdomen: liver size and tenderness (hepatomegaly screen), spleen. Neurological: gait (cerebellar ataxia), fine motor coordination, peripheral sensation. Psychiatric: orientation, affect, judgment. Integumentary: spider angiomata, palmar erythema, jaundice (hepatic disease screen). Cardiovascular: rhythm (alcohol-related arrhythmia screen).',
+ap:`Assessment: Alcohol misuse — hazardous use (F10.10). AUDIT score 12. Occupational stress as primary identified trigger. Hypertension — alcohol contribution possible (I10).
+
+Plan: (1) Alcohol misuse screening documented (G0442) — AUDIT score 12. (2) Brief counseling session 1 of 4 provided today (G0443) — motivational interviewing technique; patient receptive. Three additional sessions to be scheduled. (3) LFTs ordered (AST, ALT, GGT, bilirubin). (4) Behavioral reduction plan co-created: target ≤2 drinks/day, ≤4 days/week; written tracking log provided. (5) Alcohol-metformin interaction reviewed — minimal risk at current intake but reinforced as reason to reduce. (6) BP check: if alcohol reduction does not lower BP within 3 months, antihypertensive adjustment to be considered. (7) If AUDIT score does not improve with brief counseling after 4 sessions, addiction medicine referral to be placed. (8) Follow-up in 6 weeks.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Interpret AUDIT, deliver motivational interviewing counseling, document, order LFTs, review medication interactions',code:'G0442 · G0443'},
+{role:'RN/MA',rc:'role-rn',desc:'Administer AUDIT-C and full AUDIT instruments, document scores in chart',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule remaining 3 counseling sessions, set 6-week follow-up reminder',code:'Admin'}
+]},
+
+{id:'diabetes',tier:'inoffice',name:'Diabetes screening',freq:'Up to twice per year — at-risk patients',
+codes:[
+{c:'82947',d:'Glucose, quantitative — fasting blood glucose'},
+{c:'83036',d:'Hemoglobin A1c — primary diabetes and pre-diabetes screen'},
+{c:'82950',d:'Glucose post-glucose dose — OGTT if needed for borderline results'},
+{c:'36415',d:'Venipuncture — in-office draw'},
+{c:'G9873',d:'Diabetes Prevention Program referral — initial enrollment for pre-diabetes'},
+{c:'G0108',d:'Diabetes self-management training — individual session (DSMT)'},
+{c:'G0109',d:'Diabetes self-management training — group session'}
+],
+providers:['MD/DO, NP, PA — orders labs and interprets; DSMT by certified diabetes educator (CDE) in accredited program'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order fasting glucose and HbA1c — document qualifying risk factors: obesity, family history, HTN, dyslipidemia',code:'82947/83036'},
+{t:'order',icon:'ti-ruler',text:'Calculate and document BMI, waist circumference — obesity classification required',code:'Included in E&M'},
+{t:'order',icon:'ti-flask',text:'Add lipid panel and urine microalbumin/creatinine ratio to lab draw for complete cardiometabolic profile',code:'80061/82043'},
+{t:'refer',icon:'ti-salad',text:'Refer to DPP if pre-diabetes confirmed — HbA1c 5.7–6.4% or fasting glucose 100–125',code:'G9873'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M follow-up within 1 week to review labs and initiate treatment if needed',code:'99213–99214'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in DSMT if new diabetes diagnosis confirmed (HbA1c ≥6.5%)',code:'G0108/G0109'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in CCM/PCM once diabetes confirmed as actively managed chronic condition',code:'99490/99426'}
+],
+hpi_narrative:'Patient is a 55-year-old male with obesity and hypertension presenting for diabetes screening. He reports increased thirst and urinary frequency over the past 6 months. He has a strong family history — mother and one sibling on insulin. He is sedentary with a high-carbohydrate diet. He has not had fasting labs in over 2 years. He denies blurry vision, numbness, or tingling in his feet. He is motivated to make lifestyle changes if pre-diabetes is identified.',
+hpi_fields:[
+{l:'Chief complaint',v:'Diabetes screening — symptomatic risk factors'},
+{l:'Symptoms',v:'Polyuria, polydipsia x 6 months'},
+{l:'Severity',v:'Symptomatic — moderate concern'},
+{l:'Family Hx',v:'Mother and sibling — T2DM on insulin'},
+{l:'Risk factors',v:'BMI 34, HTN, sedentary, high-carb diet'},
+{l:'Last labs',v:'No fasting labs in >2 years'},
+{l:'Associated Sx',v:'Denies blurry vision, foot numbness, poor wound healing'},
+{l:'Acanthosis',v:'Noted on neck — consistent with insulin resistance'}
+],
+ros:'Endocrine (polyuria, polydipsia, polyphagia, heat/cold intolerance, weight changes) · GU (urinary frequency, nocturia, recurrent UTIs) · Neurological (peripheral numbness, tingling, burning feet) · Eyes (blurry vision, floaters — diabetic retinopathy screen) · Cardiovascular (exertional symptoms, edema, BP control) · Integumentary (slow wound healing, recurrent skin infections, acanthosis nigricans) · Constitutional (fatigue, weight changes).',
+pe:'Constitutional: VS including BMI (34), waist circumference. Cardiovascular: BP both arms, pedal pulses bilateral. Extremities: lower extremity edema, skin integrity, hair distribution, peripheral temperature. Neurological: 10-gram monofilament bilateral feet if neuropathy screen indicated, ankle reflexes, vibratory sense. Eyes: funduscopic exam if first diabetes confirmation visit. Skin: acanthosis nigricans (neck, axillae, groin).',
+ap:`Assessment: Diabetes mellitus screening — symptomatic with multiple risk factors. Obesity (E66.01, BMI 34), Hypertension (I10), family history T2DM (Z83.3), polyuria/polydipsia (R35.0/R63.1). Acanthosis nigricans on examination — consistent with insulin resistance. Labs pending.
+
+Plan: (1) Fasting glucose and HbA1c ordered — patient instructed to fast 8 hours for morning draw. (2) Lipid panel and urine microalbumin/creatinine ratio added to lab order. (3) If pre-diabetes (HbA1c 5.7–6.4%): DPP referral, lifestyle counseling, weight loss goal of 7% body weight discussed. (4) If diabetes confirmed (HbA1c ≥6.5%): metformin initiation, ophthalmology and podiatry referrals, DSMT enrollment, CCM enrollment. (5) Follow-up E&M scheduled in 1 week for lab result review. (6) Acanthosis nigricans documented — consistent with insulin resistance, high pre-test probability.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Order labs, assess acanthosis, initiate DPP or DSMT referral based on result, counsel on lifestyle risk reduction',code:'83036/82947'},
+{role:'RN/MA',rc:'role-rn',desc:'Document BMI, waist circumference, perform monofilament if ordered, collect lab specimens',code:'36415'},
+{role:'MA',rc:'role-ma',desc:'Schedule fasting lab draw, DPP referral if pre-DM confirmed, 1-week result follow-up E&M',code:'Admin'}
+]},
+
+{id:'obesity',tier:'inoffice',name:'Obesity screening & behavioral counseling',freq:'Screening at every visit · Counseling up to 22 sessions/year',
+codes:[
+{c:'G0447',d:'Face-to-face behavioral counseling for obesity — 15 min (BMI ≥30 required; up to 22x/year)'},
+{c:'G0473',d:'Behavioral counseling for obesity — group session (≥2 patients, 30 min)'},
+{c:'Z68.3x',d:'BMI ICD-10 code — required documentation for G0447 billing'},
+{c:'E66.01',d:'Morbid obesity due to excess calories — diagnosis code for high-complexity billing'},
+{c:'99213–99215',d:'E&M for medication management of obesity (GLP-1 agonists, etc.) — separate visit'}
+],
+providers:['MD/DO, NP, PA, CNS — primary care setting; must document BMI ≥30 as indication; group session ≥2 patients'],
+cascade:[
+{t:'order',icon:'ti-ruler',text:'Document BMI at every visit — trend over time; required for G0447 billing',code:'Included'},
+{t:'order',icon:'ti-flask',text:'Order metabolic panel, lipids, HbA1c, TSH if not recent — obesity comorbidity screen',code:'Per schedule'},
+{t:'order',icon:'ti-moon',text:'Administer OSA screen (STOP-BANG or Epworth) — obesity is primary OSA risk factor',code:'Included'},
+{t:'refer',icon:'ti-salad',text:'Refer to registered dietitian for MNT if DM or cardiovascular disease present',code:'97802/97803'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule intensive counseling series: weekly x 1 month, then biweekly, then monthly',code:'G0447 series'},
+{t:'enroll',icon:'ti-pill',text:'Discuss GLP-1 agonist therapy (semaglutide) if BMI ≥30 with comorbidity and lifestyle plateau',code:'99213+'}
+],
+hpi_narrative:'Patient presents for obesity behavioral counseling — visit 4 of intensive series. BMI today 33.1, down from 34.8 at enrollment 6 weeks ago (net loss 7 lbs). She reports improved dietary choices — reduced fast food, increased vegetables. She walks 20–25 minutes 4 days per week. She continues to struggle with evening snacking and emotional eating triggered by work stress. She denies joint pain limiting exercise. She remains motivated and engaged in the counseling program.',
+hpi_fields:[
+{l:'Chief complaint',v:'Obesity behavioral counseling — visit 4 of series'},
+{l:'BMI today',v:'33.1 (down from 34.8 at enrollment — -7 lbs)'},
+{l:'Progress',v:'Dietary improvement; walking 4x/week 20–25 min'},
+{l:'Barriers',v:'Evening snacking; emotional eating (work stress)'},
+{l:'Exercise',v:'Walking program active; denies limiting joint pain'},
+{l:'Medications',v:'No weight loss medications currently in use'},
+{l:'Associated Sx',v:'OSA screen administered — low risk currently'},
+{l:'Goal',v:'5–10% body weight loss; target BMI <30'}
+],
+ros:'Constitutional (fatigue, energy trends since last visit, appetite) · Cardiovascular (exertional symptoms, BP trends) · Respiratory (snoring, daytime somnolence, apnea episodes — OSA monitoring) · MSK (weight-bearing joint pain, mobility changes) · Endocrine (glucose symptoms, thyroid) · Psychiatric (mood, emotional eating patterns, stress, depression — PHQ-2 if not recent) · GI (GERD, reflux — common with obesity; improvement with weight loss).',
+pe:'Constitutional: VS, BMI calculated and documented, weight trend graph reviewed with patient. Cardiovascular: BP trend. Respiratory: auscultation; neck circumference if OSA screening indicated. Abdomen: adiposity distribution, organomegaly screen. MSK: mobility and gait assessment if weight-bearing joint symptoms reported.',
+ap:`Assessment: Obesity (E66.01), BMI 33.1 (Z68.33), active in behavioral counseling program. Positive progress — 7 lb weight loss in 6 weeks with good program engagement. Emotional eating pattern identified as primary behavioral barrier. OSA risk currently low.
+
+Plan: (1) Obesity counseling session 4 completed (G0447) — dietary, physical activity, and behavioral strategies reviewed. (2) BMI and weight trend documented — Z-code updated. (3) Evening snacking behavioral plan developed: protein-first snack substitution; screen-time separation from eating; stress log started. (4) OSA questionnaire score reviewed — low risk; reassess at 3-month visit. (5) GLP-1 agonist therapy discussed as option if plateau reached; patient prefers continuing behavioral approach for now — re-evaluate at 3-month mark. (6) Next counseling session in 2 weeks. (7) HbA1c ordered — due per prevention plan schedule.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Deliver 15-min structured counseling, document BMI Z-code, assess OSA risk, update treatment plan',code:'G0447'},
+{role:'RN',rc:'role-rn',desc:'Obtain weight, height, BMI; document trend; administer OSA screen; review medication list',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule next counseling session in series, update weight log in chart',code:'Admin'}
+]},
+
+{id:'tobacco',tier:'inoffice',name:'Tobacco use cessation counseling',freq:'Up to 8 sessions per year',
+codes:[
+{c:'99406',d:'Tobacco cessation counseling — 3 to 10 minutes (up to 4x/year per code)'},
+{c:'99407',d:'Tobacco cessation counseling — greater than 10 minutes (up to 4x/year per code)'},
+{c:'G0537',d:'Cardiovascular risk assessment — may accompany cessation counseling visit'},
+{c:'99213–99215',d:'E&M if additional problems addressed — modifier -25 required'},
+{c:'G9902',d:'MIPS quality measure — tobacco use screening and cessation intervention'}
+],
+providers:['MD/DO, NP, PA, CNS — primary care setting; counseling delivered directly by qualified provider'],
+cascade:[
+{t:'order',icon:'ti-clipboard-check',text:'Document tobacco type, frequency, duration, pack-years, and prior quit attempts at every visit',code:'Included in E&M'},
+{t:'order',icon:'ti-pill',text:'Prescribe first-line cessation pharmacotherapy: varenicline, bupropion, or NRT (patch + lozenge combination)',code:'Rx codes'},
+{t:'order',icon:'ti-wind',text:'Order spirometry (94010) if 20+ pack-years or any respiratory symptoms — COPD screen',code:'94010'},
+{t:'refer',icon:'ti-phone',text:'Refer to 1-800-QUIT-NOW quitline or Alabama tobacco cessation resources',code:'Community'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up at 2 weeks and 1 month to assess quit status and pharmacotherapy response',code:'99406/99407'},
+{t:'enroll',icon:'ti-lung',text:'Order LDCT annually if eligibility criteria met (age 50–77, ≥20 pk-yr)',code:'G0297'}
+],
+hpi_narrative:'Patient is a 57-year-old female presenting for tobacco cessation counseling — third session of current series. She smokes 1 pack per day with a 35-year history. She made a quit attempt 5 days ago using nicotine patch 21 mg but resumed smoking yesterday after a stressful family event. She used the patch inconsistently. She reports strong cravings in the morning and evening. She denies nicotine withdrawal symptoms beyond cravings. She is frustrated but remains motivated to quit — her daughter was recently diagnosed with lung cancer.',
+hpi_fields:[
+{l:'Chief complaint',v:'Tobacco cessation — session 3; recent relapse'},
+{l:'Tobacco history',v:'1 ppd x 35 years = 35 pack-years'},
+{l:'Quit attempt',v:'Quit x 5 days; relapsed after family stressor'},
+{l:'Pharmacotherapy',v:'Nicotine patch 21 mg — used inconsistently'},
+{l:'Cravings',v:'Strong AM and PM cravings — pattern identified'},
+{l:'Motivation',v:'High — daughter recently diagnosed with lung cancer'},
+{l:'Barriers',v:'Stress-triggered relapse; inconsistent patch use'},
+{l:'LDCT eligibility',v:'Age 57, 35 pk-yr ✓ — LDCT eligible annually'}
+],
+ros:'Respiratory (cough character and duration, sputum production, hemoptysis, wheezing, exertional dyspnea) · Cardiovascular (CP, palpitations — NRT cardiac screen) · Psychiatric (mood, anxiety, stress levels, depression — withdrawal comorbidity) · Constitutional (weight concerns with cessation — weight management counseling if relevant) · Neurological (headache during quit attempts — withdrawal symptom).',
+pe:'Constitutional: VS, weight and BMI. Respiratory: respiratory rate and effort, auscultation bilateral lung fields (wheezing, diminished breath sounds — early COPD), chest wall symmetry. Cardiovascular: rhythm, rate (NRT cardiac monitoring). Oral: inspection of lips, teeth, and oropharynx for tobacco-related lesions or leukoplakia.',
+ap:`Assessment: Tobacco use disorder, cigarette (F17.210). Active smoker 35 pack-year history. Recent quit attempt with pharmacotherapy — relapse after acute stressor. High motivation — family cancer diagnosis as catalyst. LDCT eligibility confirmed.
+
+Plan: (1) Cessation counseling session 3 delivered >10 min (99407) — relapse analysis completed; triggers identified (stress, inconsistent patch use). (2) Pharmacotherapy adjustment: combination NRT added (patch + lozenge for breakthrough cravings); proper patch rotation technique reviewed. (3) Varenicline discussed as escalation if combination NRT insufficient after 4 weeks. (4) Coping skills provided for stress-triggered cravings — 5-minute delay technique, text-based craving app recommended. (5) 1-800-QUIT-NOW referral reinforced — patient not yet called; encouraged to use between sessions. (6) Set new quit date — 1 week from today. (7) LDCT ordered (G0297) — eligibility confirmed; shared decision-making documented. (8) Spirometry ordered (94010) — 35 pack-year history with mild exertional cough. (9) Follow-up in 2 weeks.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Deliver cessation counseling, adjust pharmacotherapy, order LDCT and spirometry, document pack-years',code:'99407 · G0297 · 94010'},
+{role:'RN',rc:'role-rn',desc:'Obtain vitals, O2 sat; document tobacco history; assess NRT use technique and compliance',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Provide quitline materials, schedule 2-week and 1-month follow-ups, schedule spirometry',code:'Admin'}
+]},
+
+{id:'hiv',tier:'inoffice',name:'HIV screening',freq:'Annually (ages 15–65; higher risk any age)',
+codes:[
+{c:'86703',d:'HIV-1/HIV-2 combination antigen/antibody test — lab draw; in-office venipuncture'},
+{c:'36415',d:'Venipuncture — in-office lab draw'},
+{c:'99213–99215',d:'E&M to review positive result, counsel, and establish care — separate visit'},
+{c:'G0445',d:'High-intensity behavioral counseling for STI prevention — 20–30 min (up to 2x/year)'},
+{c:'G0539/G0540',d:'Individual behavior management/modification caregiver training services'}
+],
+providers:['MD/DO, NP, PA — orders and counsels; lab performs test; RN/MA performs venipuncture'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order HIV-1/HIV-2 combination test (86703) — document age 15–65 or specific risk factors',code:'86703'},
+{t:'order',icon:'ti-flask',text:'Add hepatitis B and C screening to lab draw if risk factors overlap',code:'86706/86803'},
+{t:'order',icon:'ti-flask',text:'Add STI panel (gonorrhea, chlamydia, syphilis) if sexually active at increased risk',code:'87590/86592'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to infectious disease immediately if HIV positive — do not delay',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule in-person result disclosure visit if reactive result — never deliver by letter or portal alone',code:'99213'},
+{t:'enroll',icon:'ti-pill',text:'Discuss PrEP eligibility if HIV negative with ongoing high-risk behavior (G0539)',code:'G0539/G0540'}
+],
+hpi_narrative:'Patient is a 34-year-old male presenting for annual preventive visit. He requests HIV screening. He has had 3 male sex partners in the past 12 months, reports consistent condom use. He denies injection drug use. He has no prior HIV test. He has a history of gonorrhea 2 years ago, treated with antibiotics. He reports no current symptoms — no unexplained weight loss, fever, lymphadenopathy, or night sweats. He is interested in learning about PrEP.',
+hpi_fields:[
+{l:'Chief complaint',v:'HIV screening — annual; PrEP discussion'},
+{l:'Risk factors',v:'MSM, 3 partners past 12 months, consistent condoms'},
+{l:'STI history',v:'Gonorrhea x1, 2 years ago — treated'},
+{l:'IDU',v:'Denies injection drug use'},
+{l:'Prior HIV test',v:'None — first time testing'},
+{l:'Symptoms',v:'Denies weight loss, fever, lymphadenopathy, night sweats'},
+{l:'PrEP interest',v:'Patient requesting PrEP information'},
+{l:'Eligibility',v:'Age 15–65 ✓; MSM with ongoing risk factors ✓'}
+],
+ros:'Constitutional (weight loss, fatigue, unexplained fevers, night sweats — acute HIV/AIDS screen) · Lymphatic (lymphadenopathy — generalized) · Integumentary (rashes, oral lesions, Kaposi sarcoma signs) · Respiratory (persistent cough, SOB — opportunistic infection screen) · Neurological (cognitive changes, headache, peripheral neuropathy) · GI (diarrhea, weight loss, candidiasis symptoms) · Psychiatric (mental health — risk behavior contributors).',
+pe:'Constitutional: VS, weight and BMI. Lymphatic: cervical, axillary, and inguinal lymphadenopathy palpation. Integumentary: skin inspection for rashes, lesions, Kaposi sarcoma lesions. Oral: oropharynx — thrush, hairy leukoplakia, aphthous ulcers. Abdomen: hepatosplenomegaly. Genitourinary: if STI co-screen indicated, external exam and urethral discharge assessment.',
+ap:`Assessment: HIV screening indicated. Male, age 34, MSM with multiple partners — age 15–65 criteria met ✓, increased risk factors present ✓. Prior STI history (gonorrhea) — additional risk marker. No current symptoms of acute HIV or AIDS-defining illness.
+
+Plan: (1) HIV-1/HIV-2 combination antigen/antibody test ordered (86703) — clinical indication documented. (2) HBV surface antigen, HCV antibody, and full STI panel added to lab draw given overlapping risk profile. (3) PrEP eligibility reviewed — patient qualifies; shared decision-making completed; PrEP prescription to be initiated at follow-up visit pending negative HIV result confirmation. (4) Behavioral counseling provided today (G0445) — consistent condom use reinforced; partner communication discussed; PrEP mechanism and monitoring requirements explained. (5) If HIV reactive: in-person result disclosure visit to be scheduled immediately; infectious disease referral same day; confirmatory Western blot ordered. (6) Follow-up scheduled in 1 week to review lab results and initiate PrEP if indicated.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Order HIV test with overlapping STI panel, conduct PrEP counseling and eligibility assessment, sign orders',code:'86703 · G0445'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform venipuncture, obtain specimens for full panel, document risk factor history',code:'36415'},
+{role:'MA',rc:'role-ma',desc:'Schedule 1-week result follow-up; flag chart for urgent contact if reactive result',code:'Admin'}
+]},
+
+{id:'hepatitis',tier:'inoffice',name:'Hepatitis B & C screening',freq:'HCV: once (or annually if ongoing IDU) · HBV: annually if high risk',
+codes:[
+{c:'86706',d:'Hepatitis B surface antigen (HBsAg) — screening for active HBV infection'},
+{c:'86705',d:'Hepatitis B core antibody (anti-HBc) — prior exposure or chronic carrier screen'},
+{c:'86803',d:'Hepatitis C antibody test — HCV screening'},
+{c:'87522',d:'Hepatitis C RNA quantitative (viral load) — ordered if HCV antibody reactive'},
+{c:'36415',d:'Venipuncture — in-office lab draw'},
+{c:'90746',d:'Hepatitis B vaccine — 3-dose series if susceptible'},
+{c:'99213–99215',d:'E&M to review reactive results and establish hepatology referral and care plan'}
+],
+providers:['MD/DO, NP, PA — orders and counsels on results; lab performs tests; RN/MA performs venipuncture; hepatology for management of confirmed infection'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order HCV antibody (86803) — born 1945–1965 (baby boomer) or IDU history or pre-1992 transfusion',code:'86803'},
+{t:'order',icon:'ti-flask',text:'Order HBsAg (86706) — high risk: HIV+, MSM, IDU, born in high-prevalence country, household contacts',code:'86706'},
+{t:'order',icon:'ti-flask',text:'If HCV antibody reactive: reflex order HCV RNA quantitative to confirm active infection',code:'87522'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to hepatology or gastroenterology if HCV or HBV confirmed — direct-acting antivirals available',code:'As indicated'},
+{t:'order',icon:'ti-vaccine',text:'Initiate hepatitis B vaccination series if HBsAg negative and anti-HBs negative (susceptible)',code:'90746'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M result review — never deliver positive hepatitis results by letter alone',code:'99213'}
+],
+hpi_narrative:'Patient is a 61-year-old male born in 1963 presenting for annual preventive exam. He was born in 1963 (within the 1945–1965 baby boomer cohort) and has never been tested for hepatitis C. He reports he experimented with recreational drugs including intranasal cocaine in his 20s — denies IV drug use. He received a blood transfusion in 1988 following a motor vehicle accident. He denies jaundice, right upper quadrant pain, or fatigue. He has unknown hepatitis B vaccination status.',
+hpi_fields:[
+{l:'Chief complaint',v:'Hepatitis B & C screening — preventive'},
+{l:'HCV criteria',v:'Born 1963 (baby boomer cohort) ✓ · Pre-1992 transfusion ✓'},
+{l:'HBV criteria',v:'Unknown vaccination status; prior drug use'},
+{l:'Symptoms',v:'Denies jaundice, RUQ pain, fatigue, dark urine'},
+{l:'Drug history',v:'Intranasal cocaine in 20s; denies IV use'},
+{l:'Transfusion',v:'Blood transfusion 1988 — pre-1992 screening era'},
+{l:'Vaccination',v:'HBV vaccination status unknown — no records'},
+{l:'Last liver labs',v:'No prior hepatic function testing on record'}
+],
+ros:'Constitutional (fatigue, malaise, unexplained weight loss) · GI (right upper quadrant pain, nausea, vomiting, abdominal distension, jaundice history) · Integumentary (jaundice, pruritus, spider angiomata, palmar erythema) · Neurological (hepatic encephalopathy signs — confusion, asterixis) · Hematologic (easy bruising, bleeding — coagulopathy in chronic liver disease) · Psychiatric (depression — common in chronic HCV).',
+pe:'Constitutional: VS, weight, BMI; jaundice assessment (scleral icterus, skin). Abdomen: liver size and tenderness, spleen (splenomegaly in portal hypertension), ascites assessment, RUQ palpation. Integumentary: spider angiomata, palmar erythema, caput medusae. Neurological: asterixis if hepatic encephalopathy suspected.',
+ap:`Assessment: Hepatitis C and B screening indicated. Born 1963 — baby boomer cohort criteria met for one-time HCV screen ✓. Pre-1992 blood transfusion ✓ — additional HCV risk factor. Unknown HBV vaccination status. Prior intranasal drug use documented.
+
+Plan: (1) HCV antibody ordered (86803) — two qualifying criteria documented. (2) HBsAg and hepatitis B surface antibody (anti-HBs) ordered (86706) — assess for active infection and immunity status. (3) LFTs (AST, ALT, bilirubin), CBC, and albumin added to lab panel — hepatic function baseline. (4) If HCV antibody reactive: reflex HCV RNA quantitative ordered; hepatology referral to be placed immediately; direct-acting antiviral therapy discussion at follow-up (>95% cure rates). (5) If HBsAg negative and anti-HBs negative (susceptible): hepatitis B vaccination series initiated (90746). (6) Result review visit scheduled — positive results to be communicated in person or by phone with follow-up visit scheduled same day.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Order full hepatitis panel, initiate HBV vaccine series if susceptible, place hepatology referral if reactive',code:'86803/86706 · 90746'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform venipuncture, administer HBV vaccine if ordered, document injection site and lot number',code:'36415 · 90746'},
+{role:'MA',rc:'role-ma',desc:'Schedule result review visit, flag chart for urgent hepatology referral if reactive, schedule vaccine series reminders',code:'Admin'}
+]},
+
+{id:'sti',tier:'inoffice',name:'STI screening & behavioral counseling',freq:'Annually (at-risk) · Counseling up to 2 sessions/year',
+codes:[
+{c:'87590',d:'Gonorrhea DNA amplification test — urine, vaginal, or urethral swab'},
+{c:'87491',d:'Chlamydia DNA amplification test — urine or swab'},
+{c:'86592',d:'Syphilis RPR qualitative screen — blood draw'},
+{c:'86593',d:'Syphilis RPR quantitative — if qualitative positive'},
+{c:'G0445',d:'High-intensity behavioral counseling — STI prevention, 20–30 min (up to 2 sessions/year)'},
+{c:'87624',d:'HPV DNA test — high-risk types; co-test with Pap (ages 30–65, every 5 years)'}
+],
+providers:['MD/DO, NP, PA — must order screenings and refer for counseling; primary care setting required for G0445; lab performs tests'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order STI panel based on risk: gonorrhea (87590), chlamydia (87491), syphilis RPR (86592)',code:'87590/87491/86592'},
+{t:'order',icon:'ti-flask',text:'Add HIV screen (86703) to lab draw if STI risk factors present — risk profiles overlap',code:'86703'},
+{t:'order',icon:'ti-flask',text:'Add hepatitis B/C screening if IDU or MSM risk factors present',code:'86706/86803'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to ID or GU clinic for treatment and partner notification if any STI confirmed',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Deliver G0445 behavioral counseling session — up to 2 sessions/year; schedule second if first delivered today',code:'G0445'},
+{t:'enroll',icon:'ti-pill',text:'Evaluate PrEP eligibility if HIV negative with ongoing STI risk (MSM, IDU, multiple partners)',code:'G0539/G0540'}
+],
+hpi_narrative:'Patient is a 28-year-old sexually active female presenting for annual STI screening. She has had 2 partners in the past year, reports inconsistent condom use. She denies vaginal discharge, dysuria, pelvic pain, or genital lesions. She has a history of chlamydia 3 years ago, treated appropriately. She is not currently pregnant. She is on oral contraceptives. She requests STI screening and has not been tested in 18 months.',
+hpi_fields:[
+{l:'Chief complaint',v:'STI screening — annual; last screen 18 months ago'},
+{l:'Risk factors',v:'Sexually active, 2 partners past year, inconsistent condoms'},
+{l:'STI history',v:'Chlamydia x1, 3 years ago — treated'},
+{l:'Symptoms',v:'Denies discharge, dysuria, pelvic pain, lesions'},
+{l:'Pregnancy',v:'Not currently pregnant; on OCP'},
+{l:'Hepatitis',v:'HBV vaccinated; HCV unknown — add to panel'},
+{l:'HIV',v:'Last HIV test 2 years ago — negative; rescreen today'},
+{l:'Pap/HPV',v:'Last Pap 1 year ago — NILM; HPV co-test due in 4 years'}
+],
+ros:'GU (vaginal discharge, dysuria, urinary frequency, pelvic pain, intermenstrual bleeding, genital lesions, dyspareunia) · Constitutional (fever, malaise, weight loss — disseminated STI screen) · Integumentary (rashes — secondary syphilis screen; genital lesions) · MSK (joint pain — reactive arthritis/gonococcal arthritis) · Lymphatic (inguinal lymphadenopathy) · Psychiatric (mental health — safe sex decision-making, partner relationship dynamics).',
+pe:'Constitutional: VS. GU: external genitalia inspection (lesions, discharge, erythema); speculum exam if indicated (cervical discharge, cervical motion tenderness screen); bimanual exam if pelvic pain reported — assess uterine and adnexal tenderness. Inguinal: lymphadenopathy palpation. Integumentary: skin rash inspection (palms, soles — secondary syphilis).',
+ap:`Assessment: STI screening indicated. Sexually active female, age 28, increased risk profile (prior chlamydia, multiple partners, inconsistent condoms). Asymptomatic at this visit.
+
+Plan: (1) STI panel ordered: chlamydia (87491), gonorrhea (87590), syphilis RPR (86592) — urine and/or swab per patient preference. (2) HIV screen added (86703) — last test 2 years ago; annual repeat indicated given risk profile. (3) HCV antibody added (86803) — prior testing unknown. (4) STI behavioral counseling delivered today (G0445) — consistent condom use, partner notification responsibility, STI transmission risk reduction reviewed; second session to be scheduled if abnormal results. (5) If chlamydia or gonorrhea positive: treatment initiated per CDC guidelines; partner notification counseled; test of cure scheduled. (6) If syphilis reactive: RPR quantitative and confirmatory treponemal test ordered; infectious disease referral placed. (7) Follow-up scheduled in 1 week for lab results review.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Order full STI panel, deliver G0445 behavioral counseling, assess PrEP eligibility, perform pelvic exam if indicated',code:'87491/87590/86592 · G0445'},
+{role:'RN/MA',rc:'role-rn',desc:'Collect urine specimen and/or swabs, perform venipuncture for blood panel, document risk factor history',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Schedule result review visit, flag chart for urgent treatment initiation if positive results returned',code:'Admin'}
+]},
+
+{id:'cervical',tier:'screening',name:'Cervical & vaginal cancer screening (Pap/HPV)',freq:'Every 24 months standard · Every 12 months high risk · HPV co-test every 5 years (ages 30–65)',
+codes:[
+{c:'G0101',d:'Cervical or vaginal cancer screening — pelvic exam + clinical breast exam'},
+{c:'Q0091',d:'Screening Pap smear collection — specimen collection fee'},
+{c:'88142',d:'Cervical cytology, liquid-based preparation — lab processing'},
+{c:'87624',d:'HPV DNA high-risk types — co-test with Pap (ages 30–65, every 5 years)'},
+{c:'77067',d:'Screening mammogram — may be ordered at same preventive visit'}
+],
+providers:['MD/DO, NP, PA, CNS — performs pelvic exam and specimen collection; lab processes Pap; no cost to patient if provider accepts assignment'],
+cascade:[
+{t:'order',icon:'ti-clipboard-check',text:'Assess Pap history, prior abnormal results, HPV status, and high-risk criteria — document indication',code:'Included in E&M'},
+{t:'order',icon:'ti-microscope',text:'Collect cervical specimen for Pap (Q0091) and HPV co-test (87624) if age 30–65 and 5 years since last',code:'Q0091/87624'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to GYN for colposcopy if Pap result ASCUS with positive HPV or LSIL/HSIL',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule result review call or visit when Pap and HPV results available (typically 7–14 days)',code:'99213'},
+{t:'enroll',icon:'ti-repeat',text:'Place on surveillance schedule if abnormal result: co-test in 1 year vs. colposcopy per ASCCP guidelines',code:'Per ASCCP'}
+],
+hpi_narrative:'Patient is a 44-year-old female presenting for annual preventive visit. Her last Pap smear was 2 years ago — result was NILM (negative for intraepithelial lesion or malignancy), HPV negative. She reports no intermenstrual bleeding, post-coital bleeding, or unusual vaginal discharge. She is in a monogamous relationship. She has no history of abnormal Pap results. She is not pregnant. Last mammogram was 11 months ago — BI-RADS 1.',
+hpi_fields:[
+{l:'Chief complaint',v:'Cervical cancer screening — due (every 24 months)'},
+{l:'Last Pap',v:'2 years ago — NILM; HPV negative'},
+{l:'Symptoms',v:'Denies intermenstrual bleeding, post-coital bleeding, discharge'},
+{l:'HPV history',v:'No prior abnormal Pap; HPV negative on co-test'},
+{l:'Relationship',v:'Monogamous; no new partners'},
+{l:'Pregnancy',v:'Not pregnant; on IUD for contraception'},
+{l:'Mammogram',v:'11 months ago — BI-RADS 1 (current)'},
+{l:'Risk level',v:'Average risk — standard 24-month interval'}
+],
+ros:'GU (intermenstrual bleeding, post-coital bleeding, unusual vaginal discharge, dyspareunia, pelvic pain, urinary symptoms) · Breast (nipple discharge, masses, skin changes) · Constitutional (weight changes, fatigue) · Endocrine (menstrual irregularity, menopausal symptoms if applicable).',
+pe:'Constitutional: VS, BMI. Integumentary/Breast: visual inspection of bilateral breasts; bilateral breast palpation including axillary lymph nodes (CBE as part of G0101). Abdomen: lower abdominal and suprapubic palpation. GU: external genitalia inspection; speculum exam — cervix visualization, specimen collection (Pap and HPV co-test); bimanual exam — uterine size, mobility, adnexal masses, cervical motion tenderness.',
+ap:`Assessment: Cervical cancer screening due per 24-month schedule. Average risk female (Z01.419). No current GU symptoms. Prior Pap NILM, HPV negative — no high-risk history.
+
+Plan: (1) Pap smear collected today (Q0091) — liquid-based preparation sent to lab (88142). (2) HPV co-test not indicated at this visit — HPV co-test done 2 years ago was negative; next co-test due in approximately 3 years (age 30–65 protocol: every 5 years). (3) Clinical breast exam performed — no masses, discharge, or lymphadenopathy; documented (G0101). (4) Results to be communicated within 7–14 days; NILM result by portal message; any abnormal result by phone with same-day follow-up appointment. (5) Mammogram current — BI-RADS 1; next due in approximately 1 month. (6) Prevention checklist updated — colorectal screening discussed for next visit.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Perform pelvic exam, collect Pap and HPV specimens, conduct clinical breast exam, interpret results and counsel',code:'G0101 · Q0091 · 88142'},
+{role:'RN/MA',rc:'role-rn',desc:'Prepare exam room, assist with speculum exam, label and transport specimens, document collection site',code:'Included'},
+{role:'MA',rc:'role-ma',desc:'Submit lab requisition, schedule result callback or portal message, note ASCCP follow-up if abnormal',code:'Admin'}
+]},
+
+{id:'prostate',tier:'inoffice',name:'Prostate cancer screening (PSA / DRE)',freq:'Annually (men over 50)',
+codes:[
+{c:'84153',d:'PSA prostate specific antigen — lab draw; no patient cost for test itself'},
+{c:'G0102',d:'Prostate cancer screening — digital rectal exam (patient pays 20% coinsurance after deductible)'},
+{c:'36415',d:'Venipuncture — in-office lab draw for PSA'},
+{c:'99213–99215',d:'E&M to review PSA result, conduct shared decision-making, establish urology referral plan'}
+],
+providers:['MD/DO, NP, PA — performs DRE and orders PSA; urologist for biopsy or further evaluation if PSA elevated'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order annual PSA lab draw (84153) — document age >50 as indication; no cost to patient for PSA itself',code:'84153'},
+{t:'order',icon:'ti-stethoscope',text:'Perform digital rectal exam (G0102) — document prostate size, consistency, nodules, tenderness',code:'G0102'},
+{t:'order',icon:'ti-file-description',text:'Conduct shared decision-making discussion — PSA benefits vs. risks (overdiagnosis, biopsy risks); document',code:'Included in E&M'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to urology if PSA elevated (>4.0 ng/mL) or PSA velocity significant or DRE abnormal',code:'As indicated'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review PSA result and adjust monitoring frequency based on result trend',code:'99213'},
+{t:'enroll',icon:'ti-repeat',text:'Document PSA baseline and trend in longitudinal dataset — critical for velocity calculation year-over-year',code:'Included in AWV/care plan'}
+],
+hpi_narrative:'Patient is a 67-year-old male presenting for annual prostate cancer screening. He reports no urinary symptoms — no hesitancy, frequency, nocturia, hematuria, or urinary stream changes. He denies bone pain. His last PSA was 1.8 ng/mL 14 months ago. He has no family history of prostate cancer. He has a history of benign prostatic hyperplasia managed with tamsulosin. Shared decision-making discussion conducted and documented — patient elects to continue annual screening.',
+hpi_fields:[
+{l:'Chief complaint',v:'Annual prostate cancer screening'},
+{l:'Last PSA',v:'1.8 ng/mL 14 months ago — normal'},
+{l:'Urinary Sx',v:'Denies hesitancy, frequency, nocturia, hematuria'},
+{l:'BPH Hx',v:'Known BPH on tamsulosin — managed'},
+{l:'Family Hx',v:'No first-degree family history of prostate CA'},
+{l:'Associated Sx',v:'Denies bone pain, weight loss, pelvic discomfort'},
+{l:'SDM',v:'Benefits vs. risks discussed; patient elects annual screen'},
+{l:'Age',v:'67 — annual PSA and DRE covered'}
+],
+ros:'GU (urinary hesitancy, frequency, nocturia, urgency, weak stream, incomplete emptying, hematuria, dysuria) · MSK (bone pain — metastatic disease screen if PSA elevated) · Constitutional (weight loss, fatigue — systemic symptom screen) · Neurological (lower extremity weakness or numbness — spinal cord compression screen if advanced disease).',
+pe:'Constitutional: VS, weight. Abdomen: suprapubic palpation — bladder distension assessment. Genitourinary/Rectal: digital rectal exam — prostate size (estimated in grams), consistency (smooth vs. nodular), symmetry, tenderness, rectal wall assessment, stool guaiac if clinically appropriate. Document: prostate characterization in A&P (e.g., "prostate 25–30g, smooth, symmetric, non-tender, no nodules").',
+ap:`Assessment: Prostate cancer screening — annual. BPH (N40.1) — stable on tamsulosin. No family history of prostate cancer. Prior PSA 1.8 ng/mL 14 months ago. Shared decision-making completed and documented.
+
+Plan: (1) PSA ordered (84153) — annual screen; no patient cost. (2) DRE performed today (G0102) — prostate approximately 25–30g, smooth, symmetric, non-tender, no nodules palpated; rectal exam otherwise unremarkable. (3) PSA result to be reviewed at next E&M: if stable or minimally increased (<0.75 ng/mL/year velocity), continue annual monitoring. If PSA >4.0 ng/mL or velocity >0.75 ng/mL/year: urology referral to be placed with shared decision-making for biopsy discussion. (4) PSA value to be entered in longitudinal data tracking for velocity calculation — this is year 2 of tracking. (5) Patient reminded that a mildly elevated PSA does not necessarily mean cancer — shared decision-making reinforced.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Conduct SDM discussion, perform DRE with documentation, sign PSA order, calculate PSA velocity at result review',code:'84153 · G0102'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform venipuncture for PSA, document DRE findings in procedure note',code:'36415'},
+{role:'MA',rc:'role-ma',desc:'Schedule result review visit, enter PSA value in longitudinal tracking spreadsheet or registry',code:'Admin'}
+]},
+
+{id:'prep',tier:'inoffice',name:'PrEP for HIV prevention',freq:'Up to 8 counseling sessions + 8 HIV screens per year (if qualifying)',
+codes:[
+{c:'G0539',d:'Individual behavior management/modification — PrEP counseling, per session'},
+{c:'G0540',d:'Caregiver training for PrEP adherence — if applicable'},
+{c:'86703',d:'HIV-1/HIV-2 combination test — required before initiating and every 3 months during PrEP'},
+{c:'86706',d:'Hepatitis B surface antigen — required pre-PrEP'},
+{c:'87591',d:'Gonorrhea and chlamydia testing — quarterly STI monitoring on PrEP'},
+{c:'99213–99215',d:'E&M visits for PrEP initiation, quarterly monitoring, and prescription management'}
+],
+providers:['MD/DO, NP, PA — prescribes PrEP, conducts monitoring; counseling by qualified provider or under supervision'],
+cascade:[
+{t:'order',icon:'ti-flask',text:'Order baseline labs before PrEP initiation: HIV test, HBV, HCV, renal function (CrCl), STI panel',code:'86703/86706/80048/87491'},
+{t:'order',icon:'ti-pill',text:'Prescribe FDA-approved oral PrEP (tenofovir/emtricitabine) or injectable cabotegravir — document indication',code:'Rx'},
+{t:'order',icon:'ti-calendar-event',text:'Establish quarterly monitoring schedule: HIV test, STI panel, renal function every 3 months',code:'86703 q3mo'},
+{t:'schedule',icon:'ti-calendar-plus',text:'Schedule PrEP initiation visit — confirm negative HIV, review renal function, initiate prescription',code:'99213–99214'},
+{t:'enroll',icon:'ti-heart-plus',text:'Enroll in PrEP adherence support program; provide patient education materials on dosing consistency',code:'G0539/G0540'},
+{t:'refer',icon:'ti-stethoscope',text:'Refer to infectious disease if adherence concerns, HIV seroconversion suspected, or renal function decline',code:'As indicated'}
+],
+hpi_narrative:'Patient is a 31-year-old HIV-negative male requesting PrEP. He is an MSM with 4 partners in the past 6 months and reports inconsistent condom use. He had one episode of rectal gonorrhea last year, treated. He has never used PrEP. He understands the purpose — to prevent HIV acquisition. He denies symptoms of acute HIV infection. He is motivated and understands the daily medication requirement and quarterly monitoring commitment.',
+hpi_fields:[
+{l:'Chief complaint',v:'PrEP initiation — HIV prevention'},
+{l:'HIV status',v:'Negative (last test 3 months ago)'},
+{l:'Risk factors',v:'MSM, 4 partners/6 months, inconsistent condoms'},
+{l:'STI history',v:'Rectal gonorrhea x1 last year — treated'},
+{l:'Acute HIV Sx',v:'Denies fever, rash, lymphadenopathy, pharyngitis'},
+{l:'Prior PrEP',v:'Never used — first initiation'},
+{l:'Renal Hx',v:'No known kidney disease; CrCl >60 expected'},
+{l:'Adherence',v:'Motivated; understands daily dosing requirement'}
+],
+ros:'Constitutional (fever, weight loss, fatigue, night sweats — acute HIV/ARS screen before initiating) · Integumentary (rash — acute HIV rash or drug reaction screening) · GU (urethral discharge, dysuria, rectal symptoms — STI co-screen) · Neurological (headache, stiff neck — acute HIV CNS screen) · Renal (edema — TDF nephrotoxicity monitoring baseline) · Psychiatric (medication adherence capacity, substance use, mental health).',
+pe:'Constitutional: VS, weight (baseline for monitoring). Lymphatic: cervical, axillary, inguinal lymphadenopathy (ARS screen). Integumentary: skin rash assessment. Abdomen: hepatosplenomegaly. GU: external genital exam, urethral and rectal swab if STI screen indicated. Neurological: brief orientation screen.',
+ap:`Assessment: PrEP for HIV prevention indicated. HIV-negative male, MSM, multiple partners, inconsistent condoms, prior STI history — meets prescribing criteria. No signs or symptoms of acute HIV infection (ARS) today.
+
+Plan: (1) HIV-1/HIV-2 combination test ordered today (86703) — must confirm negative before initiating PrEP. (2) Full STI panel ordered: chlamydia (87491), gonorrhea (87590), syphilis (86592), hepatitis B (86706), hepatitis C (86803). (3) Renal function panel ordered (BMP/CMP) — TDF nephrotoxicity baseline; CrCl must be >60 mL/min to initiate. (4) If all labs favorable: tenofovir/emtricitabine (Truvada) daily to be prescribed at follow-up visit next week. (5) PrEP adherence counseling delivered (G0539) — daily dosing critical; 7-day lead time for full protection explained. (6) Quarterly monitoring schedule established: HIV test + STI panel + renal function every 3 months. (7) Patient enrolled in medication assistance program if cost is a barrier. (8) Follow-up in 1 week to confirm labs and initiate prescription.`,
+complexity:'mod',
+tasks:[
+{role:'MD/NP',rc:'role-md',desc:'Confirm PrEP eligibility, review baseline labs, prescribe PrEP, deliver adherence counseling, establish monitoring schedule',code:'G0539 · 99214'},
+{role:'RN/MA',rc:'role-rn',desc:'Perform venipuncture for full baseline panel, collect STI specimens, document risk history',code:'36415'},
+{role:'MA',rc:'role-ma',desc:'Schedule 1-week initiation visit, set quarterly monitoring reminders, provide medication assistance program info',code:'Admin'}
+]}
+];
+
+let activeFilter='all';
+function setFilter(f,btn){activeFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+
+function getIcon(type){
+  const map={order:'ti-clipboard-list',refer:'ti-arrow-right',schedule:'ti-calendar-plus',enroll:'ti-user-plus'};
+  return map[type]||'ti-circle';
+}
+function getTypeClass(t){return{order:'ci-order',refer:'ci-refer',schedule:'ci-schedule',enroll:'ci-enroll'}[t]||'';}
+function getTypeLabel(t){return{order:'Order / lab',refer:'Refer out',schedule:'Schedule follow-up',enroll:'Enroll in program'}[t]||'';}
+function getTypeLabelClass(t){return{order:'ct-order',refer:'ct-refer',schedule:'ct-schedule',enroll:'ct-enroll'}[t]||'';}
+
+function render(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=S.filter(s=>{
+    const fm=activeFilter==='all'||(activeFilter===s.tier);
+    const qm=!q||s.name.toLowerCase().includes(q)||s.codes.some(c=>c.c.toLowerCase().includes(q)||c.d.toLowerCase().includes(q));
+    return fm&&qm;
+  });
+  document.getElementById('countLabel').textContent=`Showing ${filtered.length} of ${S.length} services`;
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(!filtered.length){grid.innerHTML='<div class="empty-state"><i class="ti ti-search-off"></i><p>No services match your search</p></div>';return;}
+  filtered.forEach(s=>{
+    const tc=s.tier==='visit'?'tier-visit':s.tier==='screening'?'tier-screening':'tier-inoffice';
+    const tl=s.tier==='visit'?'Tier 1 — complete visit':s.tier==='screening'?'Tier 2 — referred screening':'Tier 3 — in-office assessment';
+    const compClass=s.complexity==='high'?'comp-high':'comp-mod';
+    const compLabel=s.complexity==='high'?'High complexity MDM':'Moderate complexity MDM';
+    const compNote=s.complexity==='high'?'Supports 99215 with comorbidities':'Supports 99214 with comorbidities';
+    const card=document.createElement('div');card.className='service-card';
+    card.innerHTML=`
+<div class="card-header" onclick="toggle('body${s.id}','chev${s.id}')">
+  <span class="tier-badge ${tc}">${tl}</span>
+  <span class="card-title">${s.name}</span>
+  <span class="card-freq">${s.freq}</span>
+  <i class="ti ti-chevron-down chevron" id="chev${s.id}"></i>
+</div>
+<div class="card-body" id="body${s.id}">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('${s.id}','billing',this)">Billing &amp; providers</button>
+    <button class="tab" onclick="switchTab('${s.id}','cascade',this)">Care cascade</button>
+    <button class="tab" onclick="switchTab('${s.id}','note',this)">Note template</button>
+    <button class="tab" onclick="switchTab('${s.id}','tasks',this)">Care plan tasks</button>
+  </div>
+  <div class="tab-content active" id="tc${s.id}billing">
+    <div class="section-label">Billing codes</div>
+    <table class="codes-table">
+      ${s.codes.map(c=>`<tr><td style="width:130px;padding-right:8px"><span class="code-tag">${c.c}</span></td><td class="code-desc">${c.d}</td></tr>`).join('')}
+    </table>
+    <div class="section-label">Qualified providers</div>
+    <div class="provider-grid">${s.providers.map(p=>`<span class="provider-chip">${p}</span>`).join('')}</div>
+    <div class="complexity-row">
+      <span class="comp-chip ${compClass}">${compLabel}</span>
+      <span class="comp-chip comp-note">${compNote}</span>
+    </div>
+  </div>
+  <div class="tab-content" id="tc${s.id}cascade">
+    <div class="cascade-list">
+      ${s.cascade.map(c=>`
+      <div class="cascade-item">
+        <div class="cascade-icon ${getTypeClass(c.t)}"><i class="ti ${c.icon||getIcon(c.t)}"></i></div>
+        <div class="cascade-content">
+          <div class="cascade-type ${getTypeLabelClass(c.t)}">${getTypeLabel(c.t)}</div>
+          <div class="cascade-text">${c.text} <span class="cascade-code">${c.code}</span></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div class="tab-content" id="tc${s.id}note">
+    <div class="note-block">
+      <div class="section-label">HPI — narrative example</div>
+      <div class="note-narrative note-hpi">${s.hpi_narrative}</div>
+      <div class="section-label">HPI — discrete elements</div>
+      <div class="hpi-fields">${s.hpi_fields.map(f=>`<div class="hpi-field"><strong>${f.l}</strong><span>${f.v}</span></div>`).join('')}</div>
+    </div>
+    <div class="note-block">
+      <div class="section-label">ROS — systems to document (minimum 10 for comprehensive)</div>
+      <div class="note-narrative note-ros">${s.ros}</div>
+    </div>
+    <div class="note-block">
+      <div class="section-label">Physical examination — elements</div>
+      <div class="note-narrative note-pe">${s.pe}</div>
+    </div>
+    <div class="note-block">
+      <div class="section-label">Assessment &amp; plan — narrative example</div>
+      <div class="note-narrative note-ap">${s.ap}</div>
+    </div>
+  </div>
+  <div class="tab-content" id="tc${s.id}tasks">
+    <div class="tasks-list">
+      ${s.tasks.map(t=>`
+      <div class="task-item">
+        <div class="task-header"><span class="role-badge ${t.rc}">${t.role}</span></div>
+        <div class="task-desc">${t.desc}</div>
+        <div class="task-code">${t.code}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggle(bodyId,chevId){
+  const b=document.getElementById(bodyId),c=document.getElementById(chevId);
+  const open=b.classList.contains('open');
+  b.classList.toggle('open',!open);c.classList.toggle('open',!open);
+}
+function switchTab(id,tab,el){
+  ['billing','cascade','note','tasks'].forEach(t=>{const el2=document.getElementById(`tc${id}${t}`);if(el2)el2.classList.remove('active');});
+  const target=document.getElementById(`tc${id}${tab}`);if(target)target.classList.add('active');
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+render();
+</script>
+</body>
+</html>
