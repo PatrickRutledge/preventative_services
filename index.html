@@ -148,7 +148,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <span class="meta-chip"><i class="ti ti-map-pin" style="font-size:11px;vertical-align:-1px"></i> Alabama Locality 01</span>
       <span class="meta-chip">2026 Medicare Physician Fee Schedule</span>
       <span class="meta-chip">1995 &amp; 1997 E/M Documentation Guidelines</span>
-      <span class="meta-chip">CMS Preventive Services Catalog</span>
+      <span class="meta-chip">CMS Preventive Services Chart (MLN006559, Oct 2026)</span>
     </div>
   </div>
   <button class="print-btn" onclick="window.print()"><i class="ti ti-printer"></i> Print</button>
@@ -196,10 +196,11 @@ providers:['MD/DO','NP','PA','CNS'],
 cascade:[
 {t:'order',icon:'ti-flask',text:'Order lipid panel, fasting glucose, HbA1c — cardiovascular and metabolic baseline',code:'80061/82947/83036'},
 {t:'order',icon:'ti-activity',text:'Perform 12-lead EKG in office if cardiac risk factors identified',code:'93000'},
+{t:'order',icon:'ti-activity',text:'Screen for medication-induced movement disorders (e.g., tardive dyskinesia) if taking antipsychotics — use AIMS; may be done via telehealth or referral to neurology/psychiatry (Part B deductible & coinsurance apply)',code:'Per CMS Q4 2026'},
 {t:'refer',icon:'ti-scan',text:'Refer for AAA ultrasound — male 65–75, smoking history >100 cigarettes',code:'G0389'},
 {t:'refer',icon:'ti-bone',text:'Refer for DXA bone density — post-menopausal female, steroid use, fracture history',code:'77080'},
 {t:'refer',icon:'ti-lungs',text:'Refer for lung cancer LDCT — age 50–77, ≥20 pack-year history, current/recent smoker',code:'G0297'},
-{t:'refer',icon:'ti-microscope',text:'Refer for colorectal cancer screening appropriate to risk level',code:'G0121/G0464'},
+{t:'refer',icon:'ti-microscope',text:'Refer for colorectal cancer screening appropriate to risk level',code:'G0121/81528'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up E&M in 2–3 weeks to review all lab and imaging results',code:'99214–99215'},
 {t:'enroll',icon:'ti-heart-plus',text:'Enroll in CCM if 2+ chronic conditions identified',code:'99490/99491'},
 {t:'enroll',icon:'ti-calendar-repeat',text:'Establish AWV annually going forward',code:'G0438/G0439'}
@@ -244,6 +245,7 @@ cascade:[
 {t:'order',icon:'ti-flask',text:'Update lab orders per personalized prevention plan — lipids, HbA1c, CBC, as scheduled',code:'Per schedule'},
 {t:'order',icon:'ti-brain',text:'Administer and score cognitive assessment — Mini-Cog or MMSE; document result',code:'Included/99483'},
 {t:'order',icon:'ti-mood-sad',text:'Administer PHQ-9 if PHQ-2 positive; document score and clinical response',code:'G0444/96127'},
+{t:'order',icon:'ti-activity',text:'Screen for medication-induced movement disorders (e.g., tardive dyskinesia) if taking antipsychotics — use AIMS; may be done via telehealth or referral to neurology/psychiatry (Part B deductible & coinsurance apply)',code:'Per CMS Q4 2026'},
 {t:'refer',icon:'ti-scan',text:'Refer for any overdue cancer screenings identified on prevention checklist',code:'Per service'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule follow-up E&M to address new problems or abnormal HRA findings',code:'99213–99215'},
 {t:'enroll',icon:'ti-heart-plus',text:'Renew/update CCM enrollment — confirm 2+ chronic conditions, update care plan',code:'99490/G0558'},
@@ -355,10 +357,12 @@ tasks:[
 {role:'MA',rc:'role-ma',desc:'Schedule radiology AAA ultrasound, confirm prior auth if required, schedule 2–3 week follow-up E&M',code:'Admin'}
 ]},
 
-{id:'bonemass',tier:'screening',name:'Bone mass measurement (DXA / osteoporosis)',freq:'Every 2 years (sooner if medically necessary)',
+{id:'bonemass',tier:'screening',name:'Bone mass measurement (DXA / osteoporosis)',freq:'Every 2 years (sooner if medically necessary) — no frequency limit for 77080/77085 with asterisked ICD-10 codes in NCD 150.3 file',
 codes:[
 {c:'77080',d:'DXA scan axial skeleton — hip and spine; referred or in-office if DXA equipped'},
 {c:'77081',d:'DXA appendicular skeleton — wrist/heel; if axial not available'},
+{c:'77085',d:'DXA axial skeleton with vertebral fracture assessment'},
+{c:'Note',d:'Frequency limit does not apply to 77080/77085 billed with ICD-10 codes marked * in the NCD 150.3 coding file (Q87.A added Oct 1, 2026)'},
 {c:'82306',d:'Vitamin D, 25-OH — ordered with bone workup'},
 {c:'82310',d:'Calcium, total — baseline bone metabolism'},
 {c:'83970',d:'Parathyroid hormone (PTH) — if metabolic bone disease suspected'},
@@ -479,16 +483,21 @@ tasks:[
 codes:[
 {c:'82270',d:'Fecal occult blood test gFOBT — annual; written referral required'},
 {c:'G0328',d:'Fecal immunochemical test (FIT) — annual; home kit'},
-{c:'G0464',d:'Multi-target stool DNA (Cologuard) — every 3 years; average risk ages 45–85'},
+{c:'81528',d:'Multi-target stool DNA (Cologuard) — every 3 years; average risk ages 45–85'},
+{c:'0464U',d:'Multi-target stool DNA with protein marker (Cologuard Plus) — every 3 years; average risk ages 45–85'},
+{c:'0421U',d:'Stool RNA + fecal hemoglobin test (8 RNA markers) — every 3 years; average risk ages 45–85 (new, effective June 8, 2026)'},
+{c:'G0327',d:'Blood-based biomarker screening — every 3 years; average risk ages 45–85'},
+{c:'0537U',d:'Blood-based cfDNA methylation screening — every 3 years; average risk ages 45–85'},
 {c:'G0121',d:'Colonoscopy — average risk; every 10 years (120 months)'},
 {c:'G0105',d:'Colonoscopy — high risk; every 2 years (24 months)'},
-{c:'G0120',d:'Screening flexible sigmoidoscopy — every 4 years (48 months)'},
+{c:'G0104',d:'Screening flexible sigmoidoscopy — every 4 years (48 months)'},
 {c:'74263',d:'CT colonography (virtual colonoscopy) — every 5 years (60 months)'}
 ],
 providers:['MD/DO, NP, or PA — orders and documents risk stratification; colonoscopy performed by gastroenterology; stool tests patient-collected or in-office'],
 cascade:[
 {t:'order',icon:'ti-clipboard-list',text:'Assess personal and family history of polyps, CRC, IBD — document risk level (average vs. high)',code:'Included in E&M'},
-{t:'order',icon:'ti-file-description',text:'Document shared decision-making — patient preference for modality; record in chart',code:'Included'},
+{t:'order',icon:'ti-file-description',text:'Document shared decision-making — patient preference for modality; for stool DNA/RNA or blood-based tests, inform patient of test performance and need for follow-on colonoscopy if positive; record in chart',code:'Included'},
+{t:'order',icon:'ti-clipboard-list',text:'Provide written order for FOBT (82270/G0328) — required by attending physician',code:'82270/G0328'},
 {t:'refer',icon:'ti-stethoscope',text:'Refer to GI for colonoscopy if patient preference or high risk (family history CRC)',code:'G0105/G0121'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M to review colonoscopy pathology results if polyps found and removed',code:'99213–99214'},
 {t:'enroll',icon:'ti-repeat',text:'If adenomatous polyps found — document surveillance schedule in care plan per GI recommendation',code:'Per GI'}
@@ -609,6 +618,7 @@ cascade:[
 {t:'order',icon:'ti-clipboard-check',text:'Administer PHQ-2 — if score ≥3, administer full PHQ-9; document both scores in chart',code:'G0444/96127'},
 {t:'order',icon:'ti-flask',text:'Order TSH to rule out hypothyroidism as contributing factor; CBC if fatigue prominent',code:'84443/85025'},
 {t:'order',icon:'ti-pill',text:'Review all current medications for depression risk (beta-blockers, steroids, interferons)',code:'Included in E&M'},
+{t:'order',icon:'ti-activity',text:'Screen for medication-induced movement disorders (e.g., tardive dyskinesia) if taking antipsychotics — use AIMS; may be done via telehealth or referral to neurology/psychiatry (Part B deductible & coinsurance apply)',code:'Per CMS Q4 2026'},
 {t:'refer',icon:'ti-brain',text:'Refer to behavioral health or psychiatry if PHQ-9 ≥15 (severe), SI present, or treatment-resistant',code:'As indicated'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule E&M follow-up in 2–4 weeks if initiating antidepressant to assess response',code:'99213–99214'},
 {t:'enroll',icon:'ti-heart-plus',text:'Enroll in BHI or CoCM for monthly monitoring if MDD confirmed and ongoing management needed',code:'99484/99492'}
@@ -649,6 +659,7 @@ cascade:[
 {t:'order',icon:'ti-clipboard-check',text:'Administer AUDIT-C — if score ≥3 (women) or ≥4 (men), administer full AUDIT',code:'G0442'},
 {t:'order',icon:'ti-flask',text:'Order LFTs (AST, ALT, GGT, bilirubin) if hazardous use confirmed or liver disease suspected',code:'80076'},
 {t:'order',icon:'ti-pill',text:'Review medications for dangerous alcohol interactions: warfarin, benzos, opioids, metformin',code:'Included in E&M'},
+{t:'order',icon:'ti-activity',text:'Screen for medication-induced movement disorders (e.g., tardive dyskinesia) if taking antipsychotics — use AIMS; may be done via telehealth or referral to neurology/psychiatry (Part B deductible & coinsurance apply)',code:'Per CMS Q4 2026'},
 {t:'refer',icon:'ti-brain',text:'Refer to addiction medicine or SUD treatment program if AUDIT score ≥16 (severe AUD)',code:'H0004/H2036'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule remaining counseling sessions — up to 4x/year (G0443) if hazardous use identified',code:'G0443 x4'},
 {t:'enroll',icon:'ti-heart-plus',text:'Enroll in SUD treatment program if alcohol use disorder criteria met (DSM-5)',code:'H0004/H2036'}
@@ -734,7 +745,8 @@ cascade:[
 {t:'order',icon:'ti-moon',text:'Administer OSA screen (STOP-BANG or Epworth) — obesity is primary OSA risk factor',code:'Included'},
 {t:'refer',icon:'ti-salad',text:'Refer to registered dietitian for MNT if DM or cardiovascular disease present',code:'97802/97803'},
 {t:'schedule',icon:'ti-calendar-plus',text:'Schedule intensive counseling series: weekly x 1 month, then biweekly, then monthly',code:'G0447 series'},
-{t:'enroll',icon:'ti-pill',text:'Discuss GLP-1 agonist therapy (semaglutide) if BMI ≥30 with comorbidity and lifestyle plateau',code:'99213+'}
+{t:'enroll',icon:'ti-pill',text:'Discuss GLP-1 agonist therapy (semaglutide) if BMI ≥30 with comorbidity and lifestyle plateau',code:'99213+'},
+{t:'enroll',icon:'ti-pill',text:'Check eligibility for the Medicare GLP-1 Bridge demonstration (Jul 1, 2026 – Dec 31, 2027) — gives eligible Part D patients access to certain GLP-1 drugs',code:'Part D'}
 ],
 hpi_narrative:'Patient presents for obesity behavioral counseling — visit 4 of intensive series. BMI today 33.1, down from 34.8 at enrollment 6 weeks ago (net loss 7 lbs). She reports improved dietary choices — reduced fast food, increased vegetables. She walks 20–25 minutes 4 days per week. She continues to struggle with evening snacking and emotional eating triggered by work stress. She denies joint pain limiting exercise. She remains motivated and engaged in the counseling program.',
 hpi_fields:[
